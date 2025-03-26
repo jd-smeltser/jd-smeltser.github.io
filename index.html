@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat-Centric Automation Builder</title>
+    <style>
+        /* Mobile-friendly styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            max-width: 100%;
+            margin: 0;
+            padding: 15px;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h2 {
+            font-size: 1.4rem;
+            color: #3498db;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            color: #2980b9;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+        
+        ul, ol {
+            padding-left: 25px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .chat-container {
+            max-width: 100%;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: #f9f9f9;
+        }
+        
+        .chat-header {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        
+        .chat-messages {
+            padding: 15px;
+            background: #f9f9f9;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            clear: both;
+            overflow: hidden;
+        }
+        
+        .user, .assistant {
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 85%;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .user {
+            background: #e1f5fe;
+            float: right;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .assistant {
+            background: white;
+            float: left;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .message-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+        
+        .action-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin: 10px 0;
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .email-preview {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        
+        .test-results {
+            background: #e8f8f5;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .test-item {
+            margin-bottom: 8px;
+        }
+        
+        .platform-section {
+            margin-top: 30px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            background: white;
+        }
+        
+        /* Success checkmark */
+        .success {
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat-Centric Automation Builder System</h1>
+    
+    <div class="platform-section">
+        <h2>Core Functionality</h2>
+        <ul>
+            <li><strong>Conversational Interface</strong>: Build automations with natural language without technical knowledge</li>
+            <li><strong>Dynamic Connection Management</strong>: Proactive identification of needed service connections</li>
+            <li><strong>MCP Architecture</strong>: Multi-modal Connection Points for service integration</li>
+            <li><strong>Visualization</strong>: Clear visual representation of automation workflows</li>
+            <li><strong>Authentication Flow</strong>: Guided secure authentication for each service</li>
+            <li><strong>API Discovery</strong>: Intelligent endpoint identification</li>
+            <li><strong>Variable Mapping</strong>: Smart matching between different service formats</li>
+            <li><strong>Testing</strong>: Iterative workflow testing at any stage</li>
+        </ul>
+        
+        <h2>Platform Features</h2>
+        
+        <h3>Flexible Pricing Model</h3>
+        <ul>
+            <li>Usage-based pricing with platform's API keys</li>
+            <li>Subscription option ($5-10/month) for users with own API keys</li>
+            <li>No operational costs beyond usage/subscription</li>
+        </ul>
+        
+        <h3>User Experience</h3>
+        <ul>
+            <li>Native Mac app feel - smooth, natural interactions</li>
+            <li>Keyboard-centric with shortcuts for efficiency</li>
+            <li>Minimalist interface showing only what's relevant</li>
+            <li>Mobile app support with voice interface capabilities</li>
+        </ul>
+        
+        <h3>Security</h3>
+        <ul>
+            <li>End-to-end encryption options</li>
+            <li>Support for user-provided API keys</li>
+            <li>Secure credential management</li>
+        </ul>
+        
+        <h2>Interaction Style</h2>
+        <ol>
+            <li><strong>Be Proactive</strong>: Anticipate needs in workflow creation</li>
+            <li><strong>Request Clarification</strong>: Ask targeted questions for details</li>
+            <li><strong>Offer Suggestions</strong>: Recommend workflow improvements</li>
+            <li><strong>Explain Actions</strong>: Clearly communicate each step</li>
+            <li><strong>Confirm Understanding</strong>: Check alignment with expectations</li>
+            <li><strong>Guide Connection Setup</strong>: Walk through authentication</li>
+            <li><strong>Facilitate Testing</strong>: Help test workflows at various stages</li>
+            <li><strong>Support Iteration</strong>: Make it easy to modify existing workflows</li>
+            <li><strong>Document Outcomes</strong>: Provide clear automation summaries</li>
+        </ol>
+        
+        <h2>Example Workflow Process</h2>
+        <ol>
+            <li>User expresses automation need</li>
+            <li>Identify required connections</li>
+            <li>Guide through authentication if needed</li>
+            <li>Break down workflow into discrete actions</li>
+            <li>Determine data flow between actions</li>
+            <li>Identify and resolve variable mapping needs</li>
+            <li>Suggest optimizations or additional steps</li>
+            <li>Facilitate testing</li>
+            <li>Document the final workflow</li>
+        </ol>
+    </div>
+    
+    <h2 id="hubspot-example">HubSpot to Email Automation Chat Example</h2>
+    
+    <div class="chat-container">
+        <div class="chat-header">
+            Automation Builder Chat
+        </div>
+        
+        <div class="chat-messages">
+            <div class="message">
+                <div class="message-label">User:</div>
+                <div class="user">I need to email new HubSpot contacts 3 days after they're created.</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">Assistant:</div>
+                <div class="assistant">I can help build that automation! This would involve connecting to HubSpot to monitor for new contacts, waiting 3 days, then sending an email. Would you like me to set this up for you?</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">User:</div>
+                <div class="user">Yes, please.</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">Assistant:</div>
+                <div class="assistant">
+                    Great! I'll need to connect to your HubSpot account and email service. Let's start with HubSpot.
+                    <br><br>
+                    <div class="action-button">Authorize HubSpot Account</div>
+                    <br>
+                    Please authorize access to your HubSpot account by clicking this button.
+                </div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">User:</div>
+                <div class="user">[clicks button and completes authentication]</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">Assistant:</div>
+                <div class="assistant">Thanks! I can now access your HubSpot contacts. For sending emails, would you like to use Gmail or another email service?</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">User:</div>
+                <div class="user">Gmail works.</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">Assistant:</div>
+                <div class="assistant">
+                    Please authorize your Gmail account:
+                    <br><br>
+                    <div class="action-button">Authorize Gmail Account</div>
+                </div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">User:</div>
+                <div class="user">[completes authentication]</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">Assistant:</div>
+                <div class="assistant">Perfect! Now, what information from new HubSpot contacts would you like to include in your email? I can show you the available fields.
+                <br><br>
+                [Displays visual selection of contact fields]
+                </div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">User:</div>
+                <div class="user">I want to use their first name, company name, and what they requested on the form.</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">Assistant:</div>
+                <div class="assistant">Got it! I've selected those fields. Now, let's create your email template. Would you like me to draft something, or do you already have content in mind?</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">User:</div>
+                <div class="user">Please draft something for me.</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">Assistant:</div>
+                <div class="assistant">
+                    Here's a template for your follow-up email:
+                    <br><br>
+                    <div class="email-preview">
+                        <strong>Subject:</strong> Following up on your interest, {{contact.firstName}}
+                        <br><br>
+                        Hello {{contact.firstName}},
+                        <br><br>
+                        Thank you for your interest in our services. I noticed you're from {{contact.company}} and were particularly interested in {{contact.formRequest}}.
+                        <br><br>
+                        I'd love to schedule a quick call to discuss how we can help. Would you have 15 minutes this week?
+                        <br><br>
+                        Best regards,<br>
+                        [Your Name]
+                    </div>
+                    <br>
+                    You can edit this template or let me know if you'd like changes.
+                </div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">User:</div>
+                <div class="user">That looks good!</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">Assistant:</div>
+                <div class="assistant">
+                    Great! Here's a summary of your automation:
+                    <br><br>
+                    1. Trigger: When a new contact is created in HubSpot<br>
+                    2. Wait: 3 days<br>
+                    3. Action: Send personalized email via Gmail using contact details
+                    <br><br>
+                    Would you like to test this automation with a recent contact?
+                </div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">User:</div>
+                <div class="user">Yes, let's test it.</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">Assistant:</div>
+                <div class="assistant">
+                    I'll run a test using your most recent HubSpot contact:
+                    <br><br>
+                    <div class="test-results">
+                        <div class="test-item"><span class="success">✅</span> Successfully detected Jane Smith (added yesterday)</div>
+                        <div class="test-item"><span class="success">✅</span> Email preview generated with proper variables</div>
+                        <div class="test-item"><span class="success">✅</span> Would send email tomorrow (3-day wait period)</div>
+                    </div>
+                    <br>
+                    Everything looks good! Would you like to activate this automation now?
+                </div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">User:</div>
+                <div class="user">Activate it!</div>
+            </div>
+            
+            <div class="message">
+                <div class="message-label">Assistant:</div>
+                <div class="assistant">Your "HubSpot New Contact Follow-up" automation is now active! It will automatically email new contacts 3 days after they're created in HubSpot.
+                <br><br>
+                You can view and manage this automation from your dashboard anytime. Is there anything else you'd like to add or modify?</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
