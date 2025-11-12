@@ -341,8 +341,12 @@
         <h3 style="margin-bottom: 16px;">Admin Panel</h3>
 
         <div id="authSection">
-            <input type="password" id="passwordInput" placeholder="Admin Password" />
-            <input type="text" id="githubTokenInput" placeholder="GitHub Token (for edits)" />
+            <p style="font-size: 12px; color: #666; margin-bottom: 12px;">
+                Need a token?
+                <a href="https://github.com/settings/tokens/new" target="_blank" style="color: #4a9d7f;">Create one here</a>
+                <br>Select scope: <strong>repo</strong>
+            </p>
+            <input type="text" id="githubTokenInput" placeholder="GitHub Token (starts with ghp_)" />
             <button class="btn-primary" onclick="authenticate()">Login</button>
             <div id="authStatus"></div>
         </div>
@@ -528,7 +532,6 @@
         let isAuthenticated = false;
         let githubToken = '';
         let currentMode = 'edit';
-        const ADMIN_PASSWORD = 'admin123'; // Change this to a secure password
 
         function downloadPDF() {
             const element = document.getElementById('resume-content');
@@ -548,19 +551,19 @@
         }
 
         function authenticate() {
-            const password = document.getElementById('passwordInput').value;
             const token = document.getElementById('githubTokenInput').value;
 
-            if (password === ADMIN_PASSWORD) {
-                isAuthenticated = true;
-                githubToken = token;
-                document.getElementById('authSection').style.display = 'none';
-                document.getElementById('adminControls').style.display = 'block';
-                showStatus('authStatus', 'Authenticated successfully!', 'success');
-                setMode('edit');
-            } else {
-                showStatus('authStatus', 'Invalid password', 'error');
+            if (!token || !token.startsWith('ghp_')) {
+                showStatus('authStatus', 'Please enter a valid GitHub token (starts with ghp_)', 'error');
+                return;
             }
+
+            isAuthenticated = true;
+            githubToken = token;
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('adminControls').style.display = 'block';
+            showStatus('authStatus', 'Authenticated successfully!', 'success');
+            setMode('edit');
         }
 
         function logout() {
@@ -568,7 +571,6 @@
             githubToken = '';
             document.getElementById('authSection').style.display = 'block';
             document.getElementById('adminControls').style.display = 'none';
-            document.getElementById('passwordInput').value = '';
             document.getElementById('githubTokenInput').value = '';
             document.body.classList.remove('edit-mode', 'comment-mode');
             removeAllCommentBoxes();
