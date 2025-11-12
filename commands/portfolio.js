@@ -1,5 +1,5 @@
 // Portfolio command - showcase projects
-const { sleep, streamText, sendText, sendPrompt } = require('./utils');
+const { sleep, sendFadeSection, sendText, sendPrompt } = require('./utils');
 
 module.exports = async (ws, args) => {
   const projects = [
@@ -36,27 +36,13 @@ module.exports = async (ws, args) => {
   ];
 
   sendText(ws, '\x1b[1m\x1b[36m━━━ PORTFOLIO ━━━\x1b[0m\n');
-  await sleep(100);
+  await sleep(300);
 
   for (const project of projects) {
-    sendText(ws, `\n\x1b[1m\x1b[33m${project.name}\x1b[0m\n`);
-    await sleep(50);
-
-    await streamText(ws, project.description, 20);
-    sendText(ws, '\n\n\x1b[90mTech Stack:\x1b[0m ' + project.tech + '\n');
-    await sleep(100);
-
-    sendText(ws, '\x1b[90mHighlights:\x1b[0m\n');
-    await sleep(50);
-
-    for (const highlight of project.highlights) {
-      sendText(ws, '  • ');
-      await streamText(ws, highlight, 20);
-      sendText(ws, '\n');
-      await sleep(50);
-    }
-
-    await sleep(200);
+    const highlights = project.highlights.map(h => `  • ${h}`).join('\n');
+    const section = `\n\x1b[1m\x1b[33m${project.name}\x1b[0m\n${project.description}\n\n\x1b[90mTech Stack:\x1b[0m ${project.tech}\n\x1b[90mHighlights:\x1b[0m\n${highlights}\n`;
+    sendFadeSection(ws, section);
+    await sleep(800);
   }
 
   sendText(ws, '\n\x1b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\x1b[0m\n');

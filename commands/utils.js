@@ -55,6 +55,18 @@ function sendText(ws, text) {
 }
 
 /**
+ * Send a section that will fade in
+ * @param {WebSocket} ws - WebSocket connection
+ * @param {string} text - Text to send
+ */
+function sendFadeSection(ws, text) {
+  ws.send(JSON.stringify({
+    type: 'fade-section',
+    data: text.replace(/\n/g, '\r\n')
+  }));
+}
+
+/**
  * Send prompt
  * @param {WebSocket} ws - WebSocket connection
  */
@@ -66,5 +78,6 @@ module.exports = {
   sleep,
   streamText,
   sendText,
+  sendFadeSection,
   sendPrompt
 };

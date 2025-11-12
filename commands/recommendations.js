@@ -1,5 +1,5 @@
 // Recommendations command - testimonials
-const { sleep, streamText, sendText, sendPrompt } = require('./utils');
+const { sleep, sendFadeSection, sendText, sendPrompt } = require('./utils');
 
 module.exports = async (ws, args) => {
   const recommendations = [
@@ -21,16 +21,12 @@ module.exports = async (ws, args) => {
   ];
 
   sendText(ws, '\x1b[1m\x1b[36m━━━ RECOMMENDATIONS ━━━\x1b[0m\n');
-  await sleep(100);
+  await sleep(300);
 
   for (const rec of recommendations) {
-    sendText(ws, `\n\x1b[1m${rec.name}\x1b[0m\n\x1b[90m${rec.title}\x1b[0m\n\n`);
-    await sleep(50);
-
-    sendText(ws, '"');
-    await streamText(ws, rec.quote, 20);
-    sendText(ws, '"\n');
-    await sleep(300);
+    const section = `\n\x1b[1m${rec.name}\x1b[0m\n\x1b[90m${rec.title}\x1b[0m\n\n"${rec.quote}"\n`;
+    sendFadeSection(ws, section);
+    await sleep(800);
   }
 
   sendText(ws, '\n\x1b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\x1b[0m\n');

@@ -1,5 +1,5 @@
 // Resume command - interactive guide through experience
-const { sleep, streamText, sendText, sendPrompt } = require('./utils');
+const { sleep, sendFadeSection, sendText, sendPrompt } = require('./utils');
 
 module.exports = async (ws, args) => {
   const sections = [
@@ -40,15 +40,12 @@ I've led innovation in AI-driven development, integrating Claude Code and Make.c
 
   // Send resume header
   sendText(ws, '\x1b[1m\x1b[36m━━━ RESUME ━━━\x1b[0m\n');
-  await sleep(100);
+  await sleep(300);
 
-  // Stream each section
+  // Fade in each section sequentially
   for (const section of sections) {
-    sendText(ws, `\n\x1b[1m${section.title}\x1b[0m\n`);
-    await sleep(50);
-    await streamText(ws, section.content, 20);
-    sendText(ws, '\n');
-    await sleep(200);
+    sendFadeSection(ws, `\n\x1b[1m${section.title}\x1b[0m\n${section.content}\n`);
+    await sleep(800);
   }
 
   // Footer

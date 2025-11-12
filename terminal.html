@@ -261,6 +261,26 @@
                     term.write(message.data.replace(/\n/g, '\r\n'));
                     break;
 
+                case 'fade-section':
+                    // Fade in effect: write dim first, then brighten
+                    const data = message.data.replace(/\n/g, '\r\n');
+                    const numLines = (message.data.match(/\n/g) || []).length + 1;
+
+                    // Write dimmed
+                    term.write('\x1b[2m' + data + '\x1b[0m');
+
+                    // After brief pause, rewrite bright
+                    setTimeout(() => {
+                        const currentRow = term.buffer.active.cursorY;
+                        const startRow = Math.max(0, currentRow - numLines);
+
+                        // Move to start of section and rewrite
+                        term.write(`\x1b[${startRow + 1};1H`);
+                        term.write(data);
+                        term.write(`\x1b[${currentRow + 1};1H`);
+                    }, 300);
+                    break;
+
                 case 'prompt':
                     term.write('\r\n$ ');
                     promptActive = true;
