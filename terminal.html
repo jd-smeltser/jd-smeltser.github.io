@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>smeltser.dev - Jonathan Smeltser</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.min.css" />
+    <style>
+        :root {
+            --bg: #0a0f0d;
+            --text: #e0e0e0;
+            --accent: #6b9fb3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', 'Courier', monospace;
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .title {
+            font-size: 14px;
+            color: var(--accent);
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid #2a2a2a;
+            color: var(--text);
+            padding: 5px 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        #terminal-container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        #terminal {
+            height: 100%;
+        }
+
+        .xterm {
+            height: 100% !important;
+        }
+
+        .xterm-viewport {
+            background: var(--bg) !important;
+        }
+
+        /* Light theme */
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --accent: #4a7c8f;
+        }
+
+        [data-theme="light"] .header {
+            border-bottom-color: #d0d0d0;
+        }
+
+        [data-theme="light"] .theme-toggle {
+            border-color: #d0d0d0;
+        }
+
+        [data-theme="light"] .xterm-viewport {
+            background: #ffffff !important;
+        }
+
+        /* Connection status */
+        .status {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 10px;
+            color: #666;
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+        }
+
+        .status.connected {
+            color: #4ade80;
+        }
+
+        .status.disconnected {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">smeltser.dev</div>
+        <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+
+    <div id="terminal-container">
+        <div id="terminal"></div>
+    </div>
+
+    <div id="status" class="status">connecting...</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.min.js"></script>
+    <script>
+        // Theme management
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+
+            // Update terminal colors
+            if (next === 'light') {
+                term.options.theme = lightTheme;
+            } else {
+                term.options.theme = darkTheme;
+            }
+        }
+
+        // Terminal themes
+        const darkTheme = {
+            background: '#0a0f0d',
+            foreground: '#e0e0e0',
+            cursor: '#6b9fb3',
+            cursorAccent: '#0a0f0d',
+            selection: 'rgba(107, 159, 179, 0.3)',
+            black: '#1a1a1a',
+            red: '#ef4444',
+            green: '#4ade80',
+            yellow: '#fbbf24',
+            blue: '#6b9fb3',
+            magenta: '#c084fc',
+            cyan: '#22d3ee',
+            white: '#e0e0e0',
+            brightBlack: '#666666',
+            brightRed: '#f87171',
+            brightGreen: '#86efac',
+            brightYellow: '#fcd34d',
+            brightBlue: '#93c5fd',
+            brightMagenta: '#d8b4fe',
+            brightCyan: '#67e8f9',
+            brightWhite: '#ffffff'
+        };
+
+        const lightTheme = {
+            background: '#ffffff',
+            foreground: '#1a1a1a',
+            cursor: '#4a7c8f',
+            cursorAccent: '#ffffff',
+            selection: 'rgba(74, 124, 143, 0.3)',
+            black: '#000000',
+            red: '#dc2626',
+            green: '#16a34a',
+            yellow: '#ca8a04',
+            blue: '#4a7c8f',
+            magenta: '#9333ea',
+            cyan: '#0891b2',
+            white: '#666666',
+            brightBlack: '#333333',
+            brightRed: '#ef4444',
+            brightGreen: '#22c55e',
+            brightYellow: '#eab308',
+            brightBlue: '#6b9fb3',
+            brightMagenta: '#a855f7',
+            brightCyan: '#06b6d4',
+            brightWhite: '#1a1a1a'
+        };
+
+        // Initialize terminal
+        const term = new Terminal({
+            cursorBlink: true,
+            fontFamily: '"Courier New", Courier, monospace',
+            fontSize: 14,
+            theme: currentTheme === 'dark' ? darkTheme : lightTheme,
+            allowTransparency: false
+        });
+
+        const fitAddon = new FitAddon.FitAddon();
+        term.loadAddon(fitAddon);
+        term.open(document.getElementById('terminal'));
+        fitAddon.fit();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            fitAddon.fit();
+        });
+
+        // WebSocket connection
+        const ws = new WebSocket(`ws://${window.location.hostname}:3001`);
+        const statusEl = document.getElementById('status');
+        let currentLine = '';
+        let promptActive = false;
+
+        ws.onopen = () => {
+            statusEl.textContent = 'connected';
+            statusEl.className = 'status connected';
+        };
+
+        ws.onclose = () => {
+            statusEl.textContent = 'disconnected';
+            statusEl.className = 'status disconnected';
+            term.write('\r\n\x1b[31mConnection lost. Please refresh the page.\x1b[0m\r\n');
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            statusEl.textContent = 'error';
+            statusEl.className = 'status disconnected';
+        };
+
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+
+            switch (message.type) {
+                case 'output':
+                    term.write(message.data.replace(/\n/g, '\r\n'));
+                    break;
+
+                case 'prompt':
+                    term.write('\r\n$ ');
+                    promptActive = true;
+                    break;
+
+                case 'clear':
+                    term.clear();
+                    break;
+            }
+        };
+
+        // Handle keyboard input
+        term.onData((data) => {
+            if (!promptActive) return;
+
+            const code = data.charCodeAt(0);
+
+            // Handle Enter key
+            if (code === 13) {
+                term.write('\r\n');
+                ws.send(JSON.stringify({
+                    type: 'command',
+                    data: currentLine
+                }));
+                currentLine = '';
+                promptActive = false;
+                return;
+            }
+
+            // Handle Backspace
+            if (code === 127) {
+                if (currentLine.length > 0) {
+                    currentLine = currentLine.slice(0, -1);
+                    term.write('\b \b');
+                }
+                return;
+            }
+
+            // Handle Ctrl+C
+            if (code === 3) {
+                term.write('^C\r\n$ ');
+                currentLine = '';
+                return;
+            }
+
+            // Handle Ctrl+L (clear)
+            if (code === 12) {
+                term.clear();
+                term.write('$ ' + currentLine);
+                return;
+            }
+
+            // Regular character
+            if (code >= 32 && code <= 126) {
+                currentLine += data;
+                term.write(data);
+            }
+        });
+    </script>
+</body>
+</html>
