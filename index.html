@@ -1,8 +1,9 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jonathan Smeltser - Resume</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <title>Jonathan Smeltser - AI Engineer Portfolio</title>
     <style>
         * {
             margin: 0;
@@ -10,778 +11,586 @@
             box-sizing: border-box;
         }
 
-        @media print {
-            body { margin: 0; }
-            .page-break { page-break-after: always; }
-            .download-btn { display: none !important; }
-            .admin-toggle { display: none !important; }
-            .admin-panel { display: none !important; }
-            .edit-indicator { display: none !important; }
-            .comment-box { display: none !important; }
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            line-height: 1.5;
-            color: #1a1a1a;
-            max-width: 8.5in;
+            font-family: 'Courier New', 'Courier', monospace;
+            background: #0a0f0d;
+            color: #00ff00;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0.5in;
-            font-size: 10pt;
         }
 
-        .download-btn, .admin-toggle {
-            position: fixed;
-            top: 20px;
-            background: #000;
-            color: #fff;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 1000;
-        }
-
-        .download-btn {
-            right: 20px;
-        }
-
-        .admin-toggle {
-            right: 180px;
-            background: #4a4a4a;
-        }
-
-        .download-btn:hover, .admin-toggle:hover {
-            background: #333;
-        }
-
-        .admin-panel {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background: white;
-            border: 2px solid #000;
+        /* Terminal Header */
+        .terminal-header {
+            border: 2px solid #00ff00;
             border-radius: 8px;
             padding: 20px;
-            width: 320px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            z-index: 1000;
-            display: none;
+            margin-bottom: 30px;
+            background: rgba(0, 255, 0, 0.05);
         }
 
-        .admin-panel.active {
-            display: block;
+        .prompt {
+            color: #00ff00;
+            font-size: 18px;
+            margin-bottom: 10px;
         }
 
-        .admin-panel input, .admin-panel textarea {
-            width: 100%;
-            padding: 8px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: inherit;
-        }
-
-        .admin-panel button {
-            width: 100%;
-            padding: 10px;
-            margin: 4px 0;
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .admin-panel .btn-primary {
-            background: #000;
-            color: #fff;
-        }
-
-        .admin-panel .btn-secondary {
-            background: #4a9d7f;
-            color: #fff;
-        }
-
-        .admin-panel .btn-danger {
-            background: #dc3545;
-            color: #fff;
-        }
-
-        .admin-panel h4 {
-            margin-top: 16px;
-            margin-bottom: 8px;
-        }
-
-        .mode-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .mode-btn {
-            padding: 8px;
-            border: 2px solid #000;
-            background: white;
-            color: #000;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        .mode-btn.active {
-            background: #000;
-            color: white;
-        }
-
-        .editable-section {
-            position: relative;
-            padding: 8px;
-            margin: -8px;
-            border-radius: 4px;
-        }
-
-        .edit-mode .editable-section:hover {
-            background: #fffbcc;
-            outline: 2px dashed #ffd700;
-        }
-
-        .comment-mode .editable-section:hover {
-            background: #e6f3ff;
-            outline: 2px dashed #4a9d7f;
-        }
-
-        .editable-section[contenteditable="true"] {
-            outline: 2px solid #ffd700;
-            background: #fffbcc;
-        }
-
-        .comment-box {
-            background: #f0f8ff;
-            border: 2px solid #4a9d7f;
-            border-radius: 4px;
-            padding: 12px;
-            margin-top: 8px;
-        }
-
-        .comment-box textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: inherit;
-            min-height: 60px;
-        }
-
-        .comment-box button {
-            margin-top: 8px;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-right: 8px;
-        }
-
-        .comment-box .save-comment {
-            background: #4a9d7f;
-            color: white;
-        }
-
-        .comment-box .cancel-comment {
-            background: #ccc;
-            color: #333;
+        .prompt-symbol {
+            color: #00ffff;
         }
 
         h1 {
-            font-size: 28pt;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 4px;
+            font-size: 32px;
+            color: #00ffff;
+            margin-bottom: 8px;
+            font-weight: normal;
         }
 
         .subtitle {
-            font-size: 11pt;
-            color: #555;
-            margin-bottom: 8px;
-        }
-
-        .contact {
-            font-size: 9pt;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 12pt;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid #000;
-            padding-bottom: 4px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        h3 {
-            font-size: 11pt;
-            font-weight: 600;
-            margin-top: 12px;
-            margin-bottom: 4px;
-        }
-
-        .company {
-            font-weight: 700;
-        }
-
-        .role {
-            font-weight: 600;
-        }
-
-        .date {
-            color: #666;
-            font-style: italic;
-            font-size: 9pt;
-        }
-
-        .summary {
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
-
-        .skills {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px 16px;
-            margin-bottom: 16px;
-        }
-
-        .skill-category {
-            font-weight: 600;
-            font-size: 9.5pt;
-        }
-
-        .skill-list {
-            color: #333;
-            font-size: 9pt;
-            line-height: 1.4;
-        }
-
-        ul {
-            margin-left: 16px;
-            margin-bottom: 8px;
-        }
-
-        li {
-            margin-bottom: 4px;
-            line-height: 1.4;
-        }
-
-        .tech {
-            color: #666;
-            font-style: italic;
-            font-size: 9pt;
-            margin-top: 4px;
-        }
-
-        .project {
-            margin-bottom: 10px;
-        }
-
-        .project-name {
-            font-weight: 700;
-        }
-
-        .highlight {
-            font-weight: 600;
-        }
-
-        .two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            color: #00ff00;
+            opacity: 0.8;
+            font-size: 16px;
             margin-bottom: 12px;
         }
 
-        .metric {
-            font-weight: 700;
-            color: #000;
+        .contact {
+            color: #00ff00;
+            opacity: 0.6;
+            font-size: 14px;
         }
 
-        .status-message {
-            padding: 8px;
-            margin: 8px 0;
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 12px 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            cursor: pointer;
             border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 255, 0, 0.1);
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .nav-btn.active {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        /* Content Sections */
+        .section {
+            display: none;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 30px;
+            background: rgba(0, 255, 0, 0.02);
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #00ffff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #00ffff;
+            font-size: 18px;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .section-label {
+            color: #00ffff;
+            opacity: 0.6;
             font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
         }
 
-        .status-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        /* Content Styling */
+        p {
+            color: #00ff00;
+            margin-bottom: 16px;
+            opacity: 0.9;
         }
 
-        .status-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .metric {
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .highlight {
+            color: #00ffff;
+        }
+
+        ul {
+            list-style: none;
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        li {
+            color: #00ff00;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        li:before {
+            content: "→ ";
+            color: #00ffff;
+            margin-right: 8px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .card {
+            border: 1px solid #00ff00;
+            padding: 20px;
+            border-radius: 6px;
+            background: rgba(0, 255, 0, 0.03);
+        }
+
+        .card h4 {
+            color: #00ffff;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .card p {
+            font-size: 14px;
+        }
+
+        .tech-tag {
+            color: #00ff00;
+            opacity: 0.7;
+            font-size: 12px;
+            font-style: italic;
+            display: block;
+            margin-top: 8px;
+        }
+
+        .date {
+            color: #00ff00;
+            opacity: 0.6;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* Recommendation Cards */
+        .recommendation {
+            border: 1px solid #00ff00;
+            padding: 20px;
+            border-radius: 6px;
+            background: rgba(0, 255, 0, 0.03);
+            margin-bottom: 20px;
+        }
+
+        .recommendation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .recommendation-author {
+            color: #00ffff;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .recommendation-title {
+            color: #00ff00;
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .recommendation-text {
+            color: #00ff00;
+            opacity: 0.9;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Portfolio Projects */
+        .project {
+            border: 1px solid #00ff00;
+            padding: 20px;
+            border-radius: 6px;
+            background: rgba(0, 255, 0, 0.03);
+            margin-bottom: 20px;
+        }
+
+        .project-name {
+            color: #00ffff;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .project-desc {
+            color: #00ff00;
+            opacity: 0.9;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        a {
+            color: #00ffff;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        a:hover {
+            border-bottom-color: #00ffff;
+        }
+
+        /* Download Button */
+        .download-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 12px 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .download-btn:hover {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .nav {
+                gap: 10px;
+            }
+
+            .nav-btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .download-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 10px 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <button class="download-btn" onclick="downloadPDF()">Download PDF</button>
-    <button class="admin-toggle" onclick="toggleAdmin()">Admin</button>
-
-    <div class="admin-panel" id="adminPanel">
-        <h3 style="margin-bottom: 16px;">Admin Panel</h3>
-
-        <div id="authSection">
-            <p style="font-size: 12px; color: #666; margin-bottom: 12px;">
-                Need a token?
-                <a href="https://github.com/settings/tokens/new" target="_blank" style="color: #4a9d7f;">Create one here</a>
-                <br>Select scope: <strong>repo</strong>
-            </p>
-            <input type="text" id="githubTokenInput" placeholder="GitHub Token (starts with ghp_)">
-            <button class="btn-primary" onclick="authenticate()">Login</button>
-            <div id="authStatus"></div>
-        </div>
-
-        <div id="adminControls" style="display: none;">
-            <div class="mode-selector">
-                <button class="mode-btn active" onclick="setMode('edit')">Edit Mode</button>
-                <button class="mode-btn" onclick="setMode('comment')">Comment Mode</button>
+    <div class="container">
+        <!-- Terminal Header -->
+        <div class="terminal-header">
+            <div class="prompt">
+                <span class="prompt-symbol">jonathan@ai-engineer:~$</span> cat profile.txt
             </div>
-
-            <div id="modeInstructions"></div>
-
-            <button class="btn-secondary" onclick="logout()">Logout</button>
-        </div>
-    </div>
-
-    <div id="resume-content">
-        <div class="editable-section" data-section="header">
             <h1>JONATHAN SMELTSER</h1>
             <div class="subtitle">Lead AI Engineer • Value Engineering • Rapid MVP Development</div>
             <div class="contact">Memphis, TN • j.smeltser@gmail.com • linkedin.com/in/jdsmeltser</div>
         </div>
 
-        <h2>Professional Summary</h2>
-        <div class="editable-section summary" data-section="summary">
-            AI-native engineer who builds production MVPs that close deals. <span class="metric">$425K in enterprise sales</span> driven through rapid prototyping and technical proof-of-concepts. Expert in architecting AI-powered solutions across diverse tech stacks—Make.com automation, Next.js applications, TypeScript CLI tools. Creator of award-winning AI support tool adopted company-wide at Zapier. Passionate about turning client requirements into working prototypes in days, not weeks.
+        <!-- Navigation -->
+        <div class="nav">
+            <button class="nav-btn active" onclick="showSection('resume')">./resume</button>
+            <button class="nav-btn" onclick="showSection('recommendations')">./recommendations</button>
+            <button class="nav-btn" onclick="showSection('portfolio')">./portfolio</button>
         </div>
 
-        <h2>Technical Expertise</h2>
-        <div class="editable-section skills" data-section="skills">
-            <div>
-                <div class="skill-category">AI &amp; Automation</div>
-                <div class="skill-list">Agentic AI Patterns • Model Context Protocol (MCP) • AI Agent Development • Make.com Automation • OpenAI/Claude Integration</div>
-            </div>
-            <div>
-                <div class="skill-category">Development</div>
-                <div class="skill-list">TypeScript • Python • JavaScript • Node.js • React • Next.js 15 • Bun Runtime</div>
-            </div>
-            <div>
-                <div class="skill-category">Data &amp; APIs</div>
-                <div class="skill-list">PostgreSQL • SQLite • Supabase • Drizzle ORM • REST APIs • GraphQL • Webhooks • Real-time Systems</div>
-            </div>
-        </div>
+        <!-- Resume Section -->
+        <div id="resume" class="section active">
+            <h2>$ cat resume.md</h2>
 
-        <h2>Professional Experience</h2>
+            <div class="section-label">// Professional Summary</div>
+            <p>
+                AI-native engineer who builds production MVPs that close deals. <span class="metric">$425K in enterprise sales</span> driven through rapid prototyping and technical proof-of-concepts. Expert in architecting AI-powered solutions across diverse tech stacks—Make.com automation, Next.js applications, TypeScript CLI tools. Creator of award-winning AI support tool adopted company-wide at Zapier. Passionate about turning client requirements into working prototypes in days, not weeks.
+            </p>
 
-        <div class="editable-section" data-section="make-role">
-            <h3><span class="company">Make.com</span> — Value Engineer, Enterprise Team</h3>
+            <div class="section-label">// Technical Expertise</div>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>AI & Automation</h4>
+                    <p>Agentic AI Patterns • Model Context Protocol (MCP) • AI Agent Development • Make.com Automation • OpenAI/Claude Integration</p>
+                </div>
+                <div class="card">
+                    <h4>Development</h4>
+                    <p>TypeScript • Python • JavaScript • Node.js • React • Next.js 15 • Bun Runtime</p>
+                </div>
+                <div class="card">
+                    <h4>Data & APIs</h4>
+                    <p>PostgreSQL • SQLite • Supabase • Drizzle ORM • REST APIs • GraphQL • Webhooks • Real-time Systems</p>
+                </div>
+            </div>
+
+            <div class="section-label">// Professional Experience</div>
+
+            <h3>Make.com — Value Engineer, Enterprise Team</h3>
             <div class="date">July 2024 - Present (Remote)</div>
-            <p style="margin: 8px 0;">Build enterprise proof-of-value solutions demonstrating Make.com's automation capabilities. Architect client-facing MVPs that accelerate sales cycles and drive adoption.</p>
-        </div>
+            <p>Build enterprise proof-of-value solutions demonstrating Make.com's automation capabilities. Architect client-facing MVPs that accelerate sales cycles and drive adoption.</p>
 
-        <div class="editable-section" data-section="make-revenue">
-            <p style="margin: 8px 0;"><span class="highlight">Revenue Impact:</span></p>
+            <p><span class="highlight">Revenue Impact:</span></p>
             <ul>
                 <li><span class="metric">$425,673 in closed revenue</span> across 15 months (July 2024 - October 2025)</li>
                 <li>FY 2025: $169,000 in 6 months | FY 2026: $255,673 YTD</li>
                 <li>Consistently exceed quarterly quotas through technical demonstrations</li>
             </ul>
-        </div>
 
-        <div class="editable-section" data-section="make-achievements">
-            <p style="margin: 8px 0;"><span class="highlight">Key Achievements:</span></p>
+            <p><span class="highlight">Key Achievements:</span></p>
             <ul>
                 <li><span class="highlight">Endear AI Assistant</span> — Built full React prototype with AI chat interface for enterprise SaaS client. Demonstrated conversational AI architecture using Make.com webhooks, Google Sheets, and OpenAI integration. Influenced $50K+ deal.</li>
                 <li><span class="highlight">Multi-Stack Integration</span> — Designed 20+ proof-of-concepts spanning Salesforce, NetSuite, Supabase, PostgreSQL, and custom APIs for diverse enterprise clients.</li>
                 <li><span class="highlight">48-Hour Turnaround</span> — Consistently deliver working prototypes within 48-72 hours, translating complex business requirements into technical demonstrations.</li>
             </ul>
-            <div class="tech">Tech: Make.com Scenarios • Python/JavaScript • React • REST APIs • Webhooks • Multiple Database Systems</div>
-        </div>
+            <span class="tech-tag">Tech: Make.com Scenarios • Python/JavaScript • React • REST APIs • Webhooks • Multiple Database Systems</span>
 
-        <div class="editable-section" data-section="zapier-header">
-            <h3><span class="company">Zapier</span> — Technical Specialist (3 roles, promoted twice)</h3>
+            <h3>Zapier — Technical Specialist (3 roles, promoted twice)</h3>
             <div class="date">November 2021 - July 2024 (Remote)</div>
-        </div>
 
-        <div class="editable-section" data-section="zapier-sales">
-            <p style="margin: 8px 0;"><span class="role">Sales Assist Representative II</span> <span class="date">(Nov 2023 - Mar 2024)</span></p>
+            <p><span class="highlight">Sales Assist Representative II</span> <span class="date">(Nov 2023 - Mar 2024)</span></p>
             <ul>
                 <li>Exceeded sales quota by 15% in first month through technical consultations and solution demos</li>
                 <li>Built trust with 500+ prospective customers via live chat</li>
                 <li>Automated sales processes (chat scheduling, revenue reporting) improving team efficiency</li>
             </ul>
-        </div>
 
-        <div class="editable-section" data-section="zapier-retention">
-            <p style="margin: 8px 0;"><span class="role">Sr. Retention Specialist</span> <span class="date">(Jul 2023 - Nov 2023)</span></p>
+            <p><span class="highlight">Sr. Retention Specialist</span> <span class="date">(Jul 2023 - Nov 2023)</span></p>
             <ul>
                 <li>Improved retention rates from &lt;5% to &gt;20% through technical solutions and workflow optimization</li>
                 <li><span class="highlight">OfferFit Automation</span> — Architected time-tracking automation saving 5+ hours per engineer weekly</li>
             </ul>
-        </div>
 
-        <div class="editable-section" data-section="zapier-support">
-            <p style="margin: 8px 0;"><span class="role">Technical Support Specialist</span> <span class="date">(Nov 2021 - Jul 2023)</span></p>
+            <p><span class="highlight">Technical Support Specialist</span> <span class="date">(Nov 2021 - Jul 2023)</span></p>
             <ul>
                 <li><span class="highlight">SupportSidekick (AI Tool)</span> — Won Zapier's AI HackWeek with AI-powered Zendesk app. Adopted by entire support organization (100+ users), streamlining ticket resolution.</li>
                 <li>Launched live chat support for high-value customers (50% of all video consultations)</li>
             </ul>
-            <div class="tech">Tech: Zapier Platform • Python/JavaScript Code Steps • REST APIs • AI Integration (OpenAI)</div>
-        </div>
+            <span class="tech-tag">Tech: Zapier Platform • Python/JavaScript Code Steps • REST APIs • AI Integration (OpenAI)</span>
 
-        <div class="page-break"></div>
+            <div class="section-label">// Education</div>
+            <p><span class="highlight">Christian Brothers University</span> — Bachelor of Arts, Religion & Philosophy (2007-2016)</p>
 
-        <h2>Technical Portfolio</h2>
-        <div class="editable-section" data-section="portfolio-intro">
-            <p style="margin-bottom: 12px; font-style: italic; color: #555;">Demonstrating continuous learning and rapid prototyping:</p>
-        </div>
-
-        <div class="editable-section project" data-section="portfolio-arc">
-            <span class="project-name">Arc (Codebase SDK)</span> — AI-native development workspace with TypeScript CLI + API. Graph-based workflow, knowledge system with FTS5 search, agent session tracking. Migrated Node.js → Bun achieving 24x faster startup.<br>
-            <span class="tech">Tech: Bun, TypeScript, SQLite, Drizzle ORM, Commander.js</span>
-        </div>
-
-        <div class="editable-section project" data-section="portfolio-nectre">
-            <span class="project-name">Nectre</span> — Professional networking MVP with real-time features. Next.js 15 + Supabase backend, ordered-pair connection pattern, comprehensive Row Level Security.<br>
-            <span class="tech">Tech: Next.js 15, React 19, Supabase, PostgreSQL, TanStack Query</span>
-        </div>
-
-        <div class="editable-section project" data-section="portfolio-makeos">
-            <span class="project-name">Make-OS</span> — Desktop OS built entirely in Make.com with component architecture. AI agent creates applications conversationally through natural language.<br>
-            <span class="tech">Tech: Make.com, Python, Alpine.js, AI Agents</span>
-        </div>
-
-        <div class="editable-section project" data-section="portfolio-pocketos">
-            <span class="project-name">Pocket OS</span> — File-based micro-app platform where specs compile through conversation. Multiple specialized apps including custom functions generator and document analyzer.<br>
-            <span class="tech">Tech: Next.js, TypeScript, Markdown Specifications</span>
-        </div>
-
-        <div class="editable-section project" data-section="portfolio-endear">
-            <span class="project-name">Endear Client Demo</span> — React prototype with AI chat interface, Make.com webhook backend, demonstrating rapid client MVP capabilities.<br>
-            <span class="tech">Tech: React, Vite, Tailwind, Make.com Webhooks, OpenAI</span>
-        </div>
-
-        <div class="editable-section" data-section="portfolio-github">
-            <p style="margin-top: 8px; font-size: 9pt; color: #666;">GitHub: github.com/JDsmeltser &amp; github.com/smeltserMake</p>
-        </div>
-
-        <h2>Earlier Experience</h2>
-
-        <div class="editable-section" data-section="earlier-carlson" style="margin-bottom: 10px;">
-            <span class="company">Carlson Software</span> — Head of Managed Services <span class="date">(Dec 2019 - Nov 2021)</span><br>
-            Established first technical support team. Achieved 83% efficiency improvement through automation solutions.
-        </div>
-
-        <div class="editable-section" data-section="earlier-smeltser" style="margin-bottom: 10px;">
-            <span class="company">Smeltser Solutions</span> — IT Consultant <span class="date">(Dec 2012 - May 2018)</span><br>
-            Technical consulting to 70+ businesses. 80% client retention, 37.5% average productivity increase.
-        </div>
-
-        <h2>Education</h2>
-        <div class="editable-section" data-section="education">
-            <p><span class="company">Christian Brothers University</span> — Bachelor of Arts, Religion &amp; Philosophy (2007-2016)</p>
-        </div>
-
-        <h2>What Sets Me Apart</h2>
-
-        <div class="editable-section two-col" data-section="sets-apart">
-            <div>
-                <div class="highlight">Rapid Prototyping</div>
-                <p style="font-size: 9pt; line-height: 1.4;">As an early adopter in AI-native engineering, I've refined my skill set in rapid prototyping. What would typically take weeks or months of effort, I can ship in a few days.</p>
-            </div>
-            <div>
-                <div class="highlight">Tech Stack Agnostic</div>
-                <p style="font-size: 9pt; line-height: 1.4;">Portfolio spans Bun, Node, Python, Next.js, Supabase, PostgreSQL, SQLite, Make.com. I adapt to client infrastructure.</p>
-            </div>
-            <div>
-                <div class="highlight">Revenue-Focused</div>
-                <p style="font-size: 9pt; line-height: 1.4;">$425K in sales demonstrates ability to build demos that close deals, not just technically impressive solutions.</p>
-            </div>
-            <div>
-                <div class="highlight">Daily Builder</div>
-                <p style="font-size: 9pt; line-height: 1.4;">Active on LinkedIn sharing AI explorations. Currently shipping multiple projects while driving enterprise deals.</p>
+            <div class="section-label">// What Sets Me Apart</div>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>Rapid Prototyping</h4>
+                    <p>As an early adopter in AI-native engineering, I've refined my skill set in rapid prototyping. What would typically take weeks or months of effort, I can ship in a few days.</p>
+                </div>
+                <div class="card">
+                    <h4>Tech Stack Agnostic</h4>
+                    <p>Portfolio spans Bun, Node, Python, Next.js, Supabase, PostgreSQL, SQLite, Make.com. I adapt to client infrastructure.</p>
+                </div>
+                <div class="card">
+                    <h4>Revenue-Focused</h4>
+                    <p>$425K in sales demonstrates ability to build demos that close deals, not just technically impressive solutions.</p>
+                </div>
+                <div class="card">
+                    <h4>Daily Builder</h4>
+                    <p>Active on LinkedIn sharing AI explorations. Currently shipping multiple projects while driving enterprise deals.</p>
+                </div>
             </div>
         </div>
 
-        <div class="editable-section" data-section="footer">
-            <p style="text-align: center; margin-top: 20px; font-size: 9pt; color: #666;">References available upon request</p>
+        <!-- Recommendations Section -->
+        <div id="recommendations" class="section">
+            <h2>$ cat recommendations.json</h2>
+
+            <div class="recommendation">
+                <div class="recommendation-header">
+                    <div>
+                        <div class="recommendation-author">Emily Garrett</div>
+                        <div class="recommendation-title">Senior Specialist, Enterprise at Make</div>
+                    </div>
+                </div>
+                <div class="recommendation-text">
+                    "Jonathan is one of the most enthusiastic and driven people I have worked with in my 10+ years as an Enterprise AE. He has been an incredible asset to the Make Enterprise team and I hope to continue working with him for a long time to come. Jonathan truly cares about the success of his teammates which makes him a total pleasure to work with."
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-header">
+                    <div>
+                        <div class="recommendation-author">Doreen Anim</div>
+                        <div class="recommendation-title">Strategic Account Executive at Make</div>
+                    </div>
+                </div>
+                <div class="recommendation-text">
+                    "Jonathan is one of the best Value Engineers I have worked with. He is creative with scenarios, always finding ways to make things work for prospects. He is also very supportive of his team, and goes out of his way to help anyone. He is great at collaborating with various teams within the organization, ensuring that a prospect is taken care of. I'm happy to have Jonathan as a team member, and would highly recommend him to anyone that would love to have a great Value engineer and team member."
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-header">
+                    <div>
+                        <div class="recommendation-author">Doyle Lunsford</div>
+                        <div class="recommendation-title">VP, Enterprise Sales at Make</div>
+                    </div>
+                </div>
+                <div class="recommendation-text">
+                    "Jonathan joined our team earlier this year and has been an amazing addition. He's curious, driven, creative and goes above and beyond for our team and our prospects. His technical capabilities set him apart. So many value engineers come from an SE background, but Jonathan has spent time in the product building scenarios and workflows. This gives him a unique perspective when working with prospects and differentiates him from so many other value engineers."
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-header">
+                    <div>
+                        <div class="recommendation-author">Jazmin Solis</div>
+                        <div class="recommendation-title">Strategic Account Executive at Make</div>
+                    </div>
+                </div>
+                <div class="recommendation-text">
+                    "Jonathan is one of the most dedicated team members I've ever worked with. He takes his role seriously and genuinely cares about doing exceptional work. His technical expertise and problem-solving skills are impressive, but what really sets him apart is his commitment to the team and the client experience. He consistently goes the extra mile to ensure success, and his passion for what he does is evident in everything he delivers. I'm grateful to have him as a colleague!"
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-header">
+                    <div>
+                        <div class="recommendation-author">Gina Giampaolo</div>
+                        <div class="recommendation-title">VP Customer Success at Zapier</div>
+                    </div>
+                </div>
+                <div class="recommendation-text">
+                    "I had the pleasure of working with Jonathan at Zapier, and I can confidently say he's an exceptional problem solver and collaborator. Jonathan has a unique ability to dig deep into complex challenges, think critically, and come up with creative, effective solutions. What truly sets him apart is his genuine care for the people he works with—he's always willing to lend a hand, share his knowledge, and support his teammates. Jonathan would be a valuable addition to any team lucky enough to work with him!"
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Section -->
+        <div id="portfolio" class="section">
+            <h2>$ ls -la ~/projects/</h2>
+
+            <div class="project">
+                <div class="project-name">Arc (Codebase SDK)</div>
+                <div class="project-desc">
+                    AI-native development workspace with TypeScript CLI + API. Graph-based workflow, knowledge system with FTS5 search, agent session tracking. Migrated Node.js → Bun achieving 24x faster startup.
+                </div>
+                <span class="tech-tag">Tech: Bun, TypeScript, SQLite, Drizzle ORM, Commander.js</span>
+                <p><a href="https://github.com/JDsmeltser" target="_blank">View on GitHub →</a></p>
+            </div>
+
+            <div class="project">
+                <div class="project-name">Nectre</div>
+                <div class="project-desc">
+                    Professional networking MVP with real-time features. Next.js 15 + Supabase backend, ordered-pair connection pattern, comprehensive Row Level Security.
+                </div>
+                <span class="tech-tag">Tech: Next.js 15, React 19, Supabase, PostgreSQL, TanStack Query</span>
+                <p><a href="https://github.com/JDsmeltser" target="_blank">View on GitHub →</a></p>
+            </div>
+
+            <div class="project">
+                <div class="project-name">Make-OS</div>
+                <div class="project-desc">
+                    Desktop OS built entirely in Make.com with component architecture. AI agent creates applications conversationally through natural language.
+                </div>
+                <span class="tech-tag">Tech: Make.com, Python, Alpine.js, AI Agents</span>
+                <p><a href="https://github.com/smeltserMake" target="_blank">View on GitHub →</a></p>
+            </div>
+
+            <div class="project">
+                <div class="project-name">Pocket OS</div>
+                <div class="project-desc">
+                    File-based micro-app platform where specs compile through conversation. Multiple specialized apps including custom functions generator and document analyzer.
+                </div>
+                <span class="tech-tag">Tech: Next.js, TypeScript, Markdown Specifications</span>
+                <p><a href="https://github.com/JDsmeltser" target="_blank">View on GitHub →</a></p>
+            </div>
+
+            <div class="project">
+                <div class="project-name">Endear Client Demo</div>
+                <div class="project-desc">
+                    React prototype with AI chat interface, Make.com webhook backend, demonstrating rapid client MVP capabilities. Built for enterprise prospect, showcased conversational AI architecture.
+                </div>
+                <span class="tech-tag">Tech: React, Vite, Tailwind, Make.com Webhooks, OpenAI</span>
+            </div>
+
+            <div class="section-label">// Connect</div>
+            <p>
+                <a href="https://github.com/JDsmeltser" target="_blank">GitHub (Personal)</a> •
+                <a href="https://github.com/smeltserMake" target="_blank">GitHub (Work)</a> •
+                <a href="https://linkedin.com/in/jdsmeltser" target="_blank">LinkedIn</a>
+            </p>
         </div>
     </div>
 
+    <button class="download-btn" onclick="alert('PDF download coming soon!')">↓ Download Resume</button>
+
     <script>
-        let isAuthenticated = false;
-        let githubToken = '';
-        let currentMode = 'edit';
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
 
-        function downloadPDF() {
-            const element = document.getElementById('resume-content');
-            const opt = {
-                margin: 0.5,
-                filename: 'Jonathan_Smeltser_Resume.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
+            // Remove active from all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
 
-        function toggleAdmin() {
-            const panel = document.getElementById('adminPanel');
-            panel.classList.toggle('active');
-        }
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
 
-        function authenticate() {
-            const token = document.getElementById('githubTokenInput').value;
-
-            if (!token || !token.startsWith('ghp_')) {
-                showStatus('authStatus', 'Please enter a valid GitHub token (starts with ghp_)', 'error');
-                return;
-            }
-
-            isAuthenticated = true;
-            githubToken = token;
-            document.getElementById('authSection').style.display = 'none';
-            document.getElementById('adminControls').style.display = 'block';
-            showStatus('authStatus', 'Authenticated successfully!', 'success');
-            setMode('edit');
-        }
-
-        function logout() {
-            isAuthenticated = false;
-            githubToken = '';
-            document.getElementById('authSection').style.display = 'block';
-            document.getElementById('adminControls').style.display = 'none';
-            document.getElementById('githubTokenInput').value = '';
-            document.body.classList.remove('edit-mode', 'comment-mode');
-            removeAllCommentBoxes();
-        }
-
-        function setMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            // Highlight active button
             event.target.classList.add('active');
-
-            document.body.classList.remove('edit-mode', 'comment-mode');
-            document.body.classList.add(mode + '-mode');
-
-            removeAllCommentBoxes();
-
-            if (mode === 'edit') {
-                document.getElementById('modeInstructions').innerHTML =
-                    '<p style="font-size: 12px; color: #666; margin: 8px 0;">Click any section to edit. Click outside to save. Changes push to GitHub when you save.</p>';
-                setupEditMode();
-            } else {
-                document.getElementById('modeInstructions').innerHTML =
-                    '<p style="font-size: 12px; color: #666; margin: 8px 0;">Click any section to add a comment. Comments are saved for Claude to review later.</p>';
-                setupCommentMode();
-            }
-        }
-
-        function setupEditMode() {
-            const sections = document.querySelectorAll('.editable-section');
-            sections.forEach(section => {
-                section.onclick = function() {
-                    if (currentMode !== 'edit') return;
-
-                    // Disable all other sections
-                    document.querySelectorAll('.editable-section').forEach(s => {
-                        s.contentEditable = false;
-                    });
-
-                    this.contentEditable = true;
-                    this.focus();
-                };
-
-                section.onblur = function() {
-                    this.contentEditable = false;
-                    saveToGitHub(this);
-                };
-            });
-        }
-
-        function setupCommentMode() {
-            const sections = document.querySelectorAll('.editable-section');
-            sections.forEach(section => {
-                section.onclick = function(e) {
-                    if (currentMode !== 'comment') return;
-                    if (e.target.classList.contains('save-comment') || e.target.classList.contains('cancel-comment')) return;
-
-                    // Remove any existing comment boxes
-                    removeAllCommentBoxes();
-
-                    // Add comment box
-                    const commentBox = document.createElement('div');
-                    commentBox.className = 'comment-box';
-                    commentBox.innerHTML = `
-                        <textarea placeholder="Add your feedback for this section..."></textarea>
-                        <button class="save-comment" onclick="saveComment(this)">Save Comment</button>
-                        <button class="cancel-comment" onclick="removeAllCommentBoxes()">Cancel</button>
-                    `;
-                    this.appendChild(commentBox);
-                    commentBox.querySelector('textarea').focus();
-                };
-            });
-        }
-
-        function removeAllCommentBoxes() {
-            document.querySelectorAll('.comment-box').forEach(box => box.remove());
-        }
-
-        async function saveComment(button) {
-            const commentBox = button.closest('.comment-box');
-            const section = commentBox.closest('.editable-section');
-            const sectionId = section.dataset.section;
-            const comment = commentBox.querySelector('textarea').value;
-
-            if (!comment.trim()) {
-                alert('Please enter a comment');
-                return;
-            }
-
-            // Fetch existing feedback
-            let feedback = {};
-            try {
-                const response = await fetch('https://api.github.com/repos/jd-smeltser/jd-smeltser.github.io/contents/resume-feedback.json', {
-                    headers: {
-                        'Authorization': `token ${githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    feedback = JSON.parse(atob(data.content));
-                    feedback._sha = data.sha;
-                }
-            } catch (e) {
-                console.log('No existing feedback file, creating new one');
-            }
-
-            // Add new comment
-            if (!feedback.comments) feedback.comments = [];
-            feedback.comments.push({
-                section: sectionId,
-                comment: comment,
-                timestamp: new Date().toISOString()
-            });
-
-            // Save to GitHub
-            const content = btoa(JSON.stringify(feedback, null, 2));
-            const payload = {
-                message: 'Add resume feedback comment',
-                content: content
-            };
-
-            if (feedback._sha) {
-                payload.sha = feedback._sha;
-            }
-
-            try {
-                const response = await fetch('https://api.github.com/repos/jd-smeltser/jd-smeltser.github.io/contents/resume-feedback.json', {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (response.ok) {
-                    alert('Comment saved! Claude will review this feedback.');
-                    removeAllCommentBoxes();
-                } else {
-                    const error = await response.json();
-                    alert('Failed to save comment: ' + error.message);
-                }
-            } catch (error) {
-                alert('Error saving comment: ' + error.message);
-            }
-        }
-
-        async function saveToGitHub(section) {
-            if (!githubToken) {
-                alert('GitHub token required for saving edits. Please enter it in the admin panel.');
-                return;
-            }
-
-            const sectionId = section.dataset.section;
-            const updatedContent = section.innerHTML;
-
-            try {
-                // Fetch current file
-                const getResponse = await fetch('https://api.github.com/repos/jd-smeltser/jd-smeltser.github.io/contents/index.html', {
-                    headers: {
-                        'Authorization': `token ${githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-
-                const fileData = await getResponse.json();
-                const currentContent = atob(fileData.content);
-
-                // Update the HTML (simple replacement for now)
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(currentContent, 'text/html');
-                const targetSection = doc.querySelector(`[data-section="${sectionId}"]`);
-
-                if (targetSection) {
-                    targetSection.innerHTML = updatedContent;
-                    const newContent = doc.documentElement.outerHTML;
-
-                    // Save back to GitHub
-                    const putResponse = await fetch('https://api.github.com/repos/jd-smeltser/jd-smeltser.github.io/contents/index.html', {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${githubToken}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `Update ${sectionId} section`,
-                            content: btoa(newContent),
-                            sha: fileData.sha
-                        })
-                    });
-
-                    if (putResponse.ok) {
-                        console.log('Saved to GitHub successfully');
-                    } else {
-                        const error = await putResponse.json();
-                        alert('Failed to save: ' + error.message);
-                    }
-                }
-            } catch (error) {
-                alert('Error saving to GitHub: ' + error.message);
-            }
-        }
-
-        function showStatus(elementId, message, type) {
-            const element = document.getElementById(elementId);
-            element.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
-            setTimeout(() => {
-                element.innerHTML = '';
-            }, 3000);
         }
     </script>
-
-
-</body></html>
+</body>
+</html>
