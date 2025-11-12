@@ -3,8 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jonathan Smeltser - AI Engineer Portfolio</title>
+    <title>smeltserDev - Jonathan Smeltser</title>
     <style>
+        :root {
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --text-secondary: #666666;
+            --border: #d0d0d0;
+            --accent: #4a7c8f;
+            --card-bg: #f8f9fa;
+            --hover: #e8e9ea;
+        }
+
+        [data-theme="dark"] {
+            --bg: #1a1a1a;
+            --text: #e0e0e0;
+            --text-secondary: #999999;
+            --border: #404040;
+            --accent: #6b9fb3;
+            --card-bg: #242424;
+            --hover: #2a2a2a;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,100 +33,197 @@
 
         body {
             font-family: 'Courier New', 'Courier', monospace;
-            background: #0a0f0d;
-            color: #00ff00;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
-            padding: 20px;
+            transition: background 0.3s, color 0.3s;
             min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
-        /* Terminal Header */
-        .terminal-header {
-            border: 2px solid #00ff00;
-            border-radius: 8px;
-            padding: 20px;
+        /* ASCII Header */
+        .ascii-header {
+            font-size: 12px;
+            line-height: 1.2;
+            color: var(--text);
             margin-bottom: 30px;
-            background: rgba(0, 255, 0, 0.05);
+            white-space: pre;
+            overflow-x: auto;
         }
 
-        .prompt {
-            color: #00ff00;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .prompt-symbol {
-            color: #00ffff;
-        }
-
-        h1 {
-            font-size: 32px;
-            color: #00ffff;
-            margin-bottom: 8px;
-            font-weight: normal;
-        }
-
-        .subtitle {
-            color: #00ff00;
-            opacity: 0.8;
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-
-        .contact {
-            color: #00ff00;
-            opacity: 0.6;
-            font-size: 14px;
-        }
-
-        /* Navigation */
-        .nav {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .nav-btn {
-            background: transparent;
-            border: 2px solid #00ff00;
-            color: #00ff00;
-            padding: 12px 24px;
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
             font-family: 'Courier New', monospace;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             border-radius: 4px;
             transition: all 0.2s;
         }
 
-        .nav-btn:hover {
-            background: rgba(0, 255, 0, 0.1);
-            border-color: #00ffff;
-            color: #00ffff;
+        .theme-toggle:hover {
+            background: var(--hover);
         }
 
-        .nav-btn.active {
-            background: rgba(0, 255, 0, 0.2);
-            border-color: #00ffff;
-            color: #00ffff;
+        /* Admin Toggle */
+        .admin-toggle {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
         }
 
-        /* Content Sections */
-        .section {
+        .admin-toggle:hover {
+            background: var(--hover);
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 20px;
+            width: 320px;
+            border-radius: 4px;
             display: none;
-            border: 2px solid #00ff00;
-            border-radius: 8px;
+            z-index: 100;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-panel input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .admin-panel button {
+            width: 100%;
+            padding: 10px;
+            margin: 4px 0;
+            border: 1px solid var(--border);
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .admin-panel button:hover {
+            opacity: 0.9;
+        }
+
+        /* Terminal Interface */
+        .terminal {
+            border: 1px solid var(--border);
             padding: 30px;
-            background: rgba(0, 255, 0, 0.02);
+            border-radius: 4px;
+            background: var(--card-bg);
+            margin-bottom: 30px;
+        }
+
+        .prompt {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .prompt-symbol {
+            color: var(--accent);
+        }
+
+        .command-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .command-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .command-btn:hover {
+            background: var(--hover);
+            border-color: var(--accent);
+        }
+
+        .command-btn.selected {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .run-button {
+            background: var(--accent);
+            border: 1px solid var(--accent);
+            color: white;
+            padding: 12px 40px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .run-button:hover {
+            opacity: 0.9;
+        }
+
+        .run-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Output Area */
+        .output {
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 4px;
+            background: var(--card-bg);
+            display: none;
             animation: fadeIn 0.3s ease-in;
         }
 
-        .section.active {
+        .output.active {
             display: block;
         }
 
@@ -115,44 +232,50 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h2 {
-            color: #00ffff;
-            font-size: 24px;
+        .output-header {
+            color: var(--text-secondary);
             margin-bottom: 20px;
-            border-bottom: 1px solid #00ff00;
             padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        h2 {
+            color: var(--text);
+            font-size: 20px;
+            margin-bottom: 16px;
+            font-weight: normal;
         }
 
         h3 {
-            color: #00ffff;
-            font-size: 18px;
-            margin-top: 24px;
+            color: var(--text);
+            font-size: 16px;
+            margin-top: 20px;
             margin-bottom: 12px;
+            font-weight: normal;
+        }
+
+        p {
+            color: var(--text);
+            margin-bottom: 16px;
+            font-size: 14px;
         }
 
         .section-label {
-            color: #00ffff;
-            opacity: 0.6;
+            color: var(--accent);
             font-size: 12px;
             text-transform: uppercase;
             margin-bottom: 8px;
-            letter-spacing: 2px;
-        }
-
-        /* Content Styling */
-        p {
-            color: #00ff00;
-            margin-bottom: 16px;
-            opacity: 0.9;
+            letter-spacing: 1px;
         }
 
         .metric {
-            color: #00ffff;
+            color: var(--accent);
             font-weight: bold;
         }
 
         .highlight {
-            color: #00ffff;
+            color: var(--accent);
         }
 
         ul {
@@ -162,47 +285,47 @@
         }
 
         li {
-            color: #00ff00;
+            color: var(--text);
             margin-bottom: 8px;
-            opacity: 0.9;
+            font-size: 14px;
         }
 
         li:before {
-            content: "→ ";
-            color: #00ffff;
+            content: "• ";
+            color: var(--accent);
             margin-right: 8px;
         }
 
         .grid {
             display: grid;
-            gap: 24px;
+            gap: 20px;
             margin-bottom: 24px;
         }
 
         .grid-2 {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         }
 
         .card {
-            border: 1px solid #00ff00;
+            border: 1px solid var(--border);
             padding: 20px;
-            border-radius: 6px;
-            background: rgba(0, 255, 0, 0.03);
+            border-radius: 4px;
+            background: var(--bg);
         }
 
         .card h4 {
-            color: #00ffff;
+            color: var(--text);
             margin-bottom: 12px;
-            font-size: 16px;
+            font-size: 14px;
+            font-weight: normal;
         }
 
         .card p {
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .tech-tag {
-            color: #00ff00;
-            opacity: 0.7;
+            color: var(--text-secondary);
             font-size: 12px;
             font-style: italic;
             display: block;
@@ -210,100 +333,144 @@
         }
 
         .date {
-            color: #00ff00;
-            opacity: 0.6;
-            font-size: 14px;
+            color: var(--text-secondary);
+            font-size: 13px;
             font-style: italic;
         }
 
-        /* Recommendation Cards */
         .recommendation {
-            border: 1px solid #00ff00;
+            border: 1px solid var(--border);
             padding: 20px;
-            border-radius: 6px;
-            background: rgba(0, 255, 0, 0.03);
+            border-radius: 4px;
+            background: var(--bg);
             margin-bottom: 20px;
         }
 
-        .recommendation-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
         .recommendation-author {
-            color: #00ffff;
-            font-size: 16px;
+            color: var(--text);
+            font-size: 15px;
             margin-bottom: 4px;
         }
 
         .recommendation-title {
-            color: #00ff00;
-            opacity: 0.7;
-            font-size: 14px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 12px;
         }
 
         .recommendation-text {
-            color: #00ff00;
-            opacity: 0.9;
+            color: var(--text);
             font-size: 14px;
             line-height: 1.6;
         }
 
-        /* Portfolio Projects */
         .project {
-            border: 1px solid #00ff00;
+            border: 1px solid var(--border);
             padding: 20px;
-            border-radius: 6px;
-            background: rgba(0, 255, 0, 0.03);
+            border-radius: 4px;
+            background: var(--bg);
             margin-bottom: 20px;
+            position: relative;
         }
 
         .project-name {
-            color: #00ffff;
-            font-size: 18px;
+            color: var(--text);
+            font-size: 16px;
             margin-bottom: 8px;
         }
 
         .project-desc {
-            color: #00ff00;
-            opacity: 0.9;
+            color: var(--text);
             font-size: 14px;
             margin-bottom: 12px;
         }
 
+        .comment-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .comment-btn:hover {
+            background: var(--hover);
+            border-color: var(--accent);
+        }
+
+        .comment-box {
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+
+        .comment-box textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 4px;
+            font-family: inherit;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .comment-box button {
+            margin-top: 8px;
+            padding: 6px 16px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 8px;
+            font-family: inherit;
+        }
+
+        .comment-box .save-comment {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .comment-box .cancel-comment {
+            background: var(--bg);
+            color: var(--text);
+        }
+
         a {
-            color: #00ffff;
+            color: var(--accent);
             text-decoration: none;
             border-bottom: 1px solid transparent;
             transition: border-color 0.2s;
         }
 
         a:hover {
-            border-bottom-color: #00ffff;
+            border-bottom-color: var(--accent);
         }
 
-        /* Download Button */
-        .download-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: rgba(0, 255, 0, 0.1);
-            border: 2px solid #00ff00;
-            color: #00ff00;
-            padding: 12px 24px;
+        .clear-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 20px;
             font-family: 'Courier New', monospace;
             font-size: 14px;
             cursor: pointer;
             border-radius: 4px;
-            transition: all 0.2s;
+            margin-top: 20px;
         }
 
-        .download-btn:hover {
-            background: rgba(0, 255, 0, 0.2);
-            border-color: #00ffff;
-            color: #00ffff;
+        .clear-btn:hover {
+            background: var(--hover);
         }
 
         /* Responsive */
@@ -312,284 +479,483 @@
                 padding: 10px;
             }
 
-            h1 {
-                font-size: 24px;
+            .ascii-header {
+                font-size: 8px;
             }
 
-            .nav {
-                gap: 10px;
-            }
-
-            .nav-btn {
-                padding: 10px 16px;
-                font-size: 14px;
-            }
-
-            .section {
+            .terminal, .output {
                 padding: 20px;
             }
 
-            .download-btn {
-                bottom: 20px;
-                right: 20px;
-                padding: 10px 20px;
+            .command-selector {
+                gap: 8px;
+            }
+
+            .command-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+
+            .theme-toggle, .admin-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .admin-toggle {
+                top: 50px;
+            }
+
+            .admin-panel {
+                top: 90px;
+                right: 10px;
+                width: calc(100% - 20px);
             }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <!-- Terminal Header -->
-        <div class="terminal-header">
-            <div class="prompt">
-                <span class="prompt-symbol">jonathan@ai-engineer:~$</span> cat profile.txt
-            </div>
-            <h1>JONATHAN SMELTSER</h1>
-            <div class="subtitle">Lead AI Engineer • Value Engineering • Rapid MVP Development</div>
-            <div class="contact">Memphis, TN • j.smeltser@gmail.com • linkedin.com/in/jdsmeltser</div>
-        </div>
+<body data-theme="light">
+    <button class="theme-toggle" onclick="toggleTheme()">☀ / ☾</button>
+    <button class="admin-toggle" onclick="toggleAdmin()">Admin</button>
 
-        <!-- Navigation -->
-        <div class="nav">
-            <button class="nav-btn active" onclick="showSection('resume')">./resume</button>
-            <button class="nav-btn" onclick="showSection('recommendations')">./recommendations</button>
-            <button class="nav-btn" onclick="showSection('portfolio')">./portfolio</button>
-        </div>
-
-        <!-- Resume Section -->
-        <div id="resume" class="section active">
-            <h2>$ cat resume.md</h2>
-
-            <div class="section-label">// Professional Summary</div>
-            <p>
-                AI-native engineer who builds production MVPs that close deals. <span class="metric">$425K in enterprise sales</span> driven through rapid prototyping and technical proof-of-concepts. Expert in architecting AI-powered solutions across diverse tech stacks—Make.com automation, Next.js applications, TypeScript CLI tools. Creator of award-winning AI support tool adopted company-wide at Zapier. Passionate about turning client requirements into working prototypes in days, not weeks.
+    <div class="admin-panel" id="adminPanel">
+        <h3 style="margin-bottom: 16px; font-size: 16px;">Admin Panel</h3>
+        <div id="authSection">
+            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+                Enter GitHub token to enable commenting
             </p>
-
-            <div class="section-label">// Technical Expertise</div>
-            <div class="grid grid-2">
-                <div class="card">
-                    <h4>AI & Automation</h4>
-                    <p>Agentic AI Patterns • Model Context Protocol (MCP) • AI Agent Development • Make.com Automation • OpenAI/Claude Integration</p>
-                </div>
-                <div class="card">
-                    <h4>Development</h4>
-                    <p>TypeScript • Python • JavaScript • Node.js • React • Next.js 15 • Bun Runtime</p>
-                </div>
-                <div class="card">
-                    <h4>Data & APIs</h4>
-                    <p>PostgreSQL • SQLite • Supabase • Drizzle ORM • REST APIs • GraphQL • Webhooks • Real-time Systems</p>
-                </div>
-            </div>
-
-            <div class="section-label">// Professional Experience</div>
-
-            <h3>Make.com — Value Engineer, Enterprise Team</h3>
-            <div class="date">July 2024 - Present (Remote)</div>
-            <p>Build enterprise proof-of-value solutions demonstrating Make.com's automation capabilities. Architect client-facing MVPs that accelerate sales cycles and drive adoption.</p>
-
-            <p><span class="highlight">Revenue Impact:</span></p>
-            <ul>
-                <li><span class="metric">$425,673 in closed revenue</span> across 15 months (July 2024 - October 2025)</li>
-                <li>FY 2025: $169,000 in 6 months | FY 2026: $255,673 YTD</li>
-                <li>Consistently exceed quarterly quotas through technical demonstrations</li>
-            </ul>
-
-            <p><span class="highlight">Key Achievements:</span></p>
-            <ul>
-                <li><span class="highlight">Endear AI Assistant</span> — Built full React prototype with AI chat interface for enterprise SaaS client. Demonstrated conversational AI architecture using Make.com webhooks, Google Sheets, and OpenAI integration. Influenced $50K+ deal.</li>
-                <li><span class="highlight">Multi-Stack Integration</span> — Designed 20+ proof-of-concepts spanning Salesforce, NetSuite, Supabase, PostgreSQL, and custom APIs for diverse enterprise clients.</li>
-                <li><span class="highlight">48-Hour Turnaround</span> — Consistently deliver working prototypes within 48-72 hours, translating complex business requirements into technical demonstrations.</li>
-            </ul>
-            <span class="tech-tag">Tech: Make.com Scenarios • Python/JavaScript • React • REST APIs • Webhooks • Multiple Database Systems</span>
-
-            <h3>Zapier — Technical Specialist (3 roles, promoted twice)</h3>
-            <div class="date">November 2021 - July 2024 (Remote)</div>
-
-            <p><span class="highlight">Sales Assist Representative II</span> <span class="date">(Nov 2023 - Mar 2024)</span></p>
-            <ul>
-                <li>Exceeded sales quota by 15% in first month through technical consultations and solution demos</li>
-                <li>Built trust with 500+ prospective customers via live chat</li>
-                <li>Automated sales processes (chat scheduling, revenue reporting) improving team efficiency</li>
-            </ul>
-
-            <p><span class="highlight">Sr. Retention Specialist</span> <span class="date">(Jul 2023 - Nov 2023)</span></p>
-            <ul>
-                <li>Improved retention rates from &lt;5% to &gt;20% through technical solutions and workflow optimization</li>
-                <li><span class="highlight">OfferFit Automation</span> — Architected time-tracking automation saving 5+ hours per engineer weekly</li>
-            </ul>
-
-            <p><span class="highlight">Technical Support Specialist</span> <span class="date">(Nov 2021 - Jul 2023)</span></p>
-            <ul>
-                <li><span class="highlight">SupportSidekick (AI Tool)</span> — Won Zapier's AI HackWeek with AI-powered Zendesk app. Adopted by entire support organization (100+ users), streamlining ticket resolution.</li>
-                <li>Launched live chat support for high-value customers (50% of all video consultations)</li>
-            </ul>
-            <span class="tech-tag">Tech: Zapier Platform • Python/JavaScript Code Steps • REST APIs • AI Integration (OpenAI)</span>
-
-            <div class="section-label">// Education</div>
-            <p><span class="highlight">Christian Brothers University</span> — Bachelor of Arts, Religion & Philosophy (2007-2016)</p>
-
-            <div class="section-label">// What Sets Me Apart</div>
-            <div class="grid grid-2">
-                <div class="card">
-                    <h4>Rapid Prototyping</h4>
-                    <p>As an early adopter in AI-native engineering, I've refined my skill set in rapid prototyping. What would typically take weeks or months of effort, I can ship in a few days.</p>
-                </div>
-                <div class="card">
-                    <h4>Tech Stack Agnostic</h4>
-                    <p>Portfolio spans Bun, Node, Python, Next.js, Supabase, PostgreSQL, SQLite, Make.com. I adapt to client infrastructure.</p>
-                </div>
-                <div class="card">
-                    <h4>Revenue-Focused</h4>
-                    <p>$425K in sales demonstrates ability to build demos that close deals, not just technically impressive solutions.</p>
-                </div>
-                <div class="card">
-                    <h4>Daily Builder</h4>
-                    <p>Active on LinkedIn sharing AI explorations. Currently shipping multiple projects while driving enterprise deals.</p>
-                </div>
-            </div>
+            <input type="text" id="githubTokenInput" placeholder="GitHub Token (ghp_...)" />
+            <button onclick="authenticate()">Login</button>
+            <div id="authStatus"></div>
         </div>
-
-        <!-- Recommendations Section -->
-        <div id="recommendations" class="section">
-            <h2>$ cat recommendations.json</h2>
-
-            <div class="recommendation">
-                <div class="recommendation-header">
-                    <div>
-                        <div class="recommendation-author">Emily Garrett</div>
-                        <div class="recommendation-title">Senior Specialist, Enterprise at Make</div>
-                    </div>
-                </div>
-                <div class="recommendation-text">
-                    "Jonathan is one of the most enthusiastic and driven people I have worked with in my 10+ years as an Enterprise AE. He has been an incredible asset to the Make Enterprise team and I hope to continue working with him for a long time to come. Jonathan truly cares about the success of his teammates which makes him a total pleasure to work with."
-                </div>
-            </div>
-
-            <div class="recommendation">
-                <div class="recommendation-header">
-                    <div>
-                        <div class="recommendation-author">Doreen Anim</div>
-                        <div class="recommendation-title">Strategic Account Executive at Make</div>
-                    </div>
-                </div>
-                <div class="recommendation-text">
-                    "Jonathan is one of the best Value Engineers I have worked with. He is creative with scenarios, always finding ways to make things work for prospects. He is also very supportive of his team, and goes out of his way to help anyone. He is great at collaborating with various teams within the organization, ensuring that a prospect is taken care of. I'm happy to have Jonathan as a team member, and would highly recommend him to anyone that would love to have a great Value engineer and team member."
-                </div>
-            </div>
-
-            <div class="recommendation">
-                <div class="recommendation-header">
-                    <div>
-                        <div class="recommendation-author">Doyle Lunsford</div>
-                        <div class="recommendation-title">VP, Enterprise Sales at Make</div>
-                    </div>
-                </div>
-                <div class="recommendation-text">
-                    "Jonathan joined our team earlier this year and has been an amazing addition. He's curious, driven, creative and goes above and beyond for our team and our prospects. His technical capabilities set him apart. So many value engineers come from an SE background, but Jonathan has spent time in the product building scenarios and workflows. This gives him a unique perspective when working with prospects and differentiates him from so many other value engineers."
-                </div>
-            </div>
-
-            <div class="recommendation">
-                <div class="recommendation-header">
-                    <div>
-                        <div class="recommendation-author">Jazmin Solis</div>
-                        <div class="recommendation-title">Strategic Account Executive at Make</div>
-                    </div>
-                </div>
-                <div class="recommendation-text">
-                    "Jonathan is one of the most dedicated team members I've ever worked with. He takes his role seriously and genuinely cares about doing exceptional work. His technical expertise and problem-solving skills are impressive, but what really sets him apart is his commitment to the team and the client experience. He consistently goes the extra mile to ensure success, and his passion for what he does is evident in everything he delivers. I'm grateful to have him as a colleague!"
-                </div>
-            </div>
-
-            <div class="recommendation">
-                <div class="recommendation-header">
-                    <div>
-                        <div class="recommendation-author">Gina Giampaolo</div>
-                        <div class="recommendation-title">VP Customer Success at Zapier</div>
-                    </div>
-                </div>
-                <div class="recommendation-text">
-                    "I had the pleasure of working with Jonathan at Zapier, and I can confidently say he's an exceptional problem solver and collaborator. Jonathan has a unique ability to dig deep into complex challenges, think critically, and come up with creative, effective solutions. What truly sets him apart is his genuine care for the people he works with—he's always willing to lend a hand, share his knowledge, and support his teammates. Jonathan would be a valuable addition to any team lucky enough to work with him!"
-                </div>
-            </div>
-        </div>
-
-        <!-- Portfolio Section -->
-        <div id="portfolio" class="section">
-            <h2>$ ls -la ~/projects/</h2>
-
-            <div class="project">
-                <div class="project-name">Arc (Codebase SDK)</div>
-                <div class="project-desc">
-                    AI-native development workspace with TypeScript CLI + API. Graph-based workflow, knowledge system with FTS5 search, agent session tracking. Migrated Node.js → Bun achieving 24x faster startup.
-                </div>
-                <span class="tech-tag">Tech: Bun, TypeScript, SQLite, Drizzle ORM, Commander.js</span>
-                <p><a href="https://github.com/JDsmeltser" target="_blank">View on GitHub →</a></p>
-            </div>
-
-            <div class="project">
-                <div class="project-name">Nectre</div>
-                <div class="project-desc">
-                    Professional networking MVP with real-time features. Next.js 15 + Supabase backend, ordered-pair connection pattern, comprehensive Row Level Security.
-                </div>
-                <span class="tech-tag">Tech: Next.js 15, React 19, Supabase, PostgreSQL, TanStack Query</span>
-                <p><a href="https://github.com/JDsmeltser" target="_blank">View on GitHub →</a></p>
-            </div>
-
-            <div class="project">
-                <div class="project-name">Make-OS</div>
-                <div class="project-desc">
-                    Desktop OS built entirely in Make.com with component architecture. AI agent creates applications conversationally through natural language.
-                </div>
-                <span class="tech-tag">Tech: Make.com, Python, Alpine.js, AI Agents</span>
-                <p><a href="https://github.com/smeltserMake" target="_blank">View on GitHub →</a></p>
-            </div>
-
-            <div class="project">
-                <div class="project-name">Pocket OS</div>
-                <div class="project-desc">
-                    File-based micro-app platform where specs compile through conversation. Multiple specialized apps including custom functions generator and document analyzer.
-                </div>
-                <span class="tech-tag">Tech: Next.js, TypeScript, Markdown Specifications</span>
-                <p><a href="https://github.com/JDsmeltser" target="_blank">View on GitHub →</a></p>
-            </div>
-
-            <div class="project">
-                <div class="project-name">Endear Client Demo</div>
-                <div class="project-desc">
-                    React prototype with AI chat interface, Make.com webhook backend, demonstrating rapid client MVP capabilities. Built for enterprise prospect, showcased conversational AI architecture.
-                </div>
-                <span class="tech-tag">Tech: React, Vite, Tailwind, Make.com Webhooks, OpenAI</span>
-            </div>
-
-            <div class="section-label">// Connect</div>
-            <p>
-                <a href="https://github.com/JDsmeltser" target="_blank">GitHub (Personal)</a> •
-                <a href="https://github.com/smeltserMake" target="_blank">GitHub (Work)</a> •
-                <a href="https://linkedin.com/in/jdsmeltser" target="_blank">LinkedIn</a>
-            </p>
+        <div id="adminControls" style="display: none;">
+            <p style="font-size: 12px; color: var(--text-secondary);">Commenting enabled. Click "+" buttons to add feedback.</p>
+            <button style="background: var(--bg); color: var(--text);" onclick="logout()">Logout</button>
         </div>
     </div>
 
-    <button class="download-btn" onclick="alert('PDF download coming soon!')">↓ Download Resume</button>
+    <div class="container">
+        <pre class="ascii-header">
+ _____ __  __ _____ _   _____ _____ _________  ______ _______      __
+/ ____|  \/  | ____| | |_   _/ ____|  ____  ||  ____|  __ \ \    / /
+| (___ | \  / | |__  | |   | || (___ | |__  | || |__  | |  | \ \  / /
+\___ \| |\/| |  __| | |   | | \___ \|  __| | ||  __| | |  | |\ \/ /
+____) | |  | | |____| |___| | ____) | |____ | || |____| |__| | \  /
+|_____/|_|  |_|______|_____|_||_____/|______||__|______|_____/   \/
+
+Jonathan Smeltser - AI Engineer Portfolio
+        </pre>
+
+        <div class="terminal">
+            <div class="prompt">
+                <span class="prompt-symbol">$</span> Select command and run
+            </div>
+
+            <div class="command-selector">
+                <button class="command-btn" data-command="help">help</button>
+                <button class="command-btn" data-command="resume">resume</button>
+                <button class="command-btn" data-command="recommendations">recommendations</button>
+                <button class="command-btn" data-command="portfolio">portfolio</button>
+            </div>
+
+            <button class="run-button" onclick="runCommand()" disabled>Run</button>
+        </div>
+
+        <div class="output" id="output">
+            <div class="output-header" id="outputHeader"></div>
+            <div id="outputContent"></div>
+            <button class="clear-btn" onclick="clearOutput()">Clear</button>
+        </div>
+    </div>
 
     <script>
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
+        let selectedCommand = null;
+        let isAuthenticated = false;
+        let githubToken = '';
+
+        // Command selection
+        document.querySelectorAll('.command-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.command-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedCommand = this.dataset.command;
+                document.querySelector('.run-button').disabled = false;
+            });
+        });
+
+        // Theme toggle
+        function toggleTheme() {
+            const currentTheme = document.body.dataset.theme;
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.body.dataset.theme = newTheme;
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.body.dataset.theme = savedTheme;
+
+        // Admin panel
+        function toggleAdmin() {
+            document.getElementById('adminPanel').classList.toggle('active');
+        }
+
+        function authenticate() {
+            const token = document.getElementById('githubTokenInput').value;
+            if (!token || !token.startsWith('ghp_')) {
+                alert('Please enter a valid GitHub token');
+                return;
+            }
+            isAuthenticated = true;
+            githubToken = token;
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('adminControls').style.display = 'block';
+        }
+
+        function logout() {
+            isAuthenticated = false;
+            githubToken = '';
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('adminControls').style.display = 'none';
+            document.getElementById('githubTokenInput').value = '';
+        }
+
+        // Run command
+        function runCommand() {
+            if (!selectedCommand) return;
+
+            const output = document.getElementById('output');
+            const header = document.getElementById('outputHeader');
+            const content = document.getElementById('outputContent');
+
+            header.textContent = `$ ${selectedCommand}`;
+            output.classList.add('active');
+
+            const commands = {
+                help: getHelpContent,
+                resume: getResumeContent,
+                recommendations: getRecommendationsContent,
+                portfolio: getPortfolioContent
+            };
+
+            content.innerHTML = commands[selectedCommand]();
+            output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function clearOutput() {
+            document.getElementById('output').classList.remove('active');
+            document.querySelectorAll('.command-btn').forEach(b => b.classList.remove('selected'));
+            selectedCommand = null;
+            document.querySelector('.run-button').disabled = true;
+        }
+
+        function getHelpContent() {
+            return `
+                <h2>Available Commands</h2>
+                <ul>
+                    <li><strong>resume</strong> - View professional resume and experience</li>
+                    <li><strong>recommendations</strong> - Read recommendations from colleagues</li>
+                    <li><strong>portfolio</strong> - Explore technical projects</li>
+                    <li><strong>help</strong> - Show this help message</li>
+                </ul>
+                <p style="margin-top: 20px;">Select a command above and click "Run" to execute.</p>
+            `;
+        }
+
+        function getResumeContent() {
+            return `
+                <div class="section-label">// Professional Summary</div>
+                <p>
+                    AI-native engineer who builds production MVPs that close deals. <span class="metric">$425K in enterprise sales</span> driven through rapid prototyping and technical proof-of-concepts. Expert in architecting AI-powered solutions across diverse tech stacks—Make.com automation, Next.js applications, TypeScript CLI tools. Creator of award-winning AI support tool adopted company-wide at Zapier. Passionate about turning client requirements into working prototypes in days, not weeks.
+                </p>
+
+                <div class="section-label">// Technical Expertise</div>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h4>AI & Automation</h4>
+                        <p>Agentic AI Patterns • Model Context Protocol (MCP) • AI Agent Development • Make.com Automation • OpenAI/Claude Integration</p>
+                    </div>
+                    <div class="card">
+                        <h4>Development</h4>
+                        <p>TypeScript • Python • JavaScript • Node.js • React • Next.js 15 • Bun Runtime</p>
+                    </div>
+                    <div class="card">
+                        <h4>Data & APIs</h4>
+                        <p>PostgreSQL • SQLite • Supabase • Drizzle ORM • REST APIs • GraphQL • Webhooks • Real-time Systems</p>
+                    </div>
+                </div>
+
+                <div class="section-label">// Professional Experience</div>
+
+                <h3>Make.com — Value Engineer, Enterprise Team</h3>
+                <div class="date">July 2024 - Present (Remote)</div>
+                <p>Build enterprise proof-of-value solutions demonstrating Make.com's automation capabilities. Architect client-facing MVPs that accelerate sales cycles and drive adoption.</p>
+
+                <p><span class="highlight">Revenue Impact:</span></p>
+                <ul>
+                    <li><span class="metric">$425,673 in closed revenue</span> across 15 months (July 2024 - October 2025)</li>
+                    <li>FY 2025: $169,000 in 6 months | FY 2026: $255,673 YTD</li>
+                    <li>Consistently exceed quarterly quotas through technical demonstrations</li>
+                </ul>
+
+                <p><span class="highlight">Key Achievements:</span></p>
+                <ul>
+                    <li><span class="highlight">Endear AI Assistant</span> — Built full React prototype with AI chat interface for enterprise SaaS client. Demonstrated conversational AI architecture using Make.com webhooks, Google Sheets, and OpenAI integration. Influenced $50K+ deal.</li>
+                    <li><span class="highlight">Multi-Stack Integration</span> — Designed 20+ proof-of-concepts spanning Salesforce, NetSuite, Supabase, PostgreSQL, and custom APIs for diverse enterprise clients.</li>
+                    <li><span class="highlight">48-Hour Turnaround</span> — Consistently deliver working prototypes within 48-72 hours, translating complex business requirements into technical demonstrations.</li>
+                </ul>
+                <span class="tech-tag">Tech: Make.com Scenarios • Python/JavaScript • React • REST APIs • Webhooks • Multiple Database Systems</span>
+
+                <h3>Zapier — Technical Specialist (3 roles, promoted twice)</h3>
+                <div class="date">November 2021 - July 2024 (Remote)</div>
+
+                <p><span class="highlight">Sales Assist Representative II</span> <span class="date">(Nov 2023 - Mar 2024)</span></p>
+                <ul>
+                    <li>Exceeded sales quota by 15% in first month through technical consultations and solution demos</li>
+                    <li>Built trust with 500+ prospective customers via live chat</li>
+                    <li>Automated sales processes (chat scheduling, revenue reporting) improving team efficiency</li>
+                </ul>
+
+                <p><span class="highlight">Sr. Retention Specialist</span> <span class="date">(Jul 2023 - Nov 2023)</span></p>
+                <ul>
+                    <li>Improved retention rates from &lt;5% to &gt;20% through technical solutions and workflow optimization</li>
+                    <li><span class="highlight">OfferFit Automation</span> — Architected time-tracking automation saving 5+ hours per engineer weekly</li>
+                </ul>
+
+                <p><span class="highlight">Technical Support Specialist</span> <span class="date">(Nov 2021 - Jul 2023)</span></p>
+                <ul>
+                    <li><span class="highlight">SupportSidekick (AI Tool)</span> — Won Zapier's AI HackWeek with AI-powered Zendesk app. Adopted by entire support organization (100+ users), streamlining ticket resolution.</li>
+                    <li>Launched live chat support for high-value customers (50% of all video consultations)</li>
+                </ul>
+                <span class="tech-tag">Tech: Zapier Platform • Python/JavaScript Code Steps • REST APIs • AI Integration (OpenAI)</span>
+
+                <div class="section-label">// Education</div>
+                <p><span class="highlight">Christian Brothers University</span> — Bachelor of Arts, Religion & Philosophy (2007-2016)</p>
+
+                <div class="section-label">// What Sets Me Apart</div>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h4>Rapid Prototyping</h4>
+                        <p>As an early adopter in AI-native engineering, I've refined my skill set in rapid prototyping. What would typically take weeks or months of effort, I can ship in a few days.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Tech Stack Agnostic</h4>
+                        <p>Portfolio spans Bun, Node, Python, Next.js, Supabase, PostgreSQL, SQLite, Make.com. I adapt to client infrastructure.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Revenue-Focused</h4>
+                        <p>$425K in sales demonstrates ability to build demos that close deals, not just technically impressive solutions.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Daily Builder</h4>
+                        <p>Active on LinkedIn sharing AI explorations. Currently shipping multiple projects while driving enterprise deals.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getRecommendationsContent() {
+            return `
+                <h2>Professional Recommendations</h2>
+
+                <div class="recommendation">
+                    <div class="recommendation-author">Emily Garrett</div>
+                    <div class="recommendation-title">Senior Specialist, Enterprise at Make</div>
+                    <div class="recommendation-text">
+                        "Jonathan is one of the most enthusiastic and driven people I have worked with in my 10+ years as an Enterprise AE. He has been an incredible asset to the Make Enterprise team and I hope to continue working with him for a long time to come. Jonathan truly cares about the success of his teammates which makes him a total pleasure to work with."
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <div class="recommendation-author">Doreen Anim</div>
+                    <div class="recommendation-title">Strategic Account Executive at Make</div>
+                    <div class="recommendation-text">
+                        "Jonathan is one of the best Value Engineers I have worked with. He is creative with scenarios, always finding ways to make things work for prospects. He is also very supportive of his team, and goes out of his way to help anyone. He is great at collaborating with various teams within the organization, ensuring that a prospect is taken care of. I'm happy to have Jonathan as a team member, and would highly recommend him to anyone that would love to have a great Value engineer and team member."
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <div class="recommendation-author">Doyle Lunsford</div>
+                    <div class="recommendation-title">VP, Enterprise Sales at Make</div>
+                    <div class="recommendation-text">
+                        "Jonathan joined our team earlier this year and has been an amazing addition. He's curious, driven, creative and goes above and beyond for our team and our prospects. His technical capabilities set him apart. So many value engineers come from an SE background, but Jonathan has spent time in the product building scenarios and workflows. This gives him a unique perspective when working with prospects and differentiates him from so many other value engineers."
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <div class="recommendation-author">Jazmin Solis</div>
+                    <div class="recommendation-title">Strategic Account Executive at Make</div>
+                    <div class="recommendation-text">
+                        "Jonathan is one of the most dedicated team members I've ever worked with. He takes his role seriously and genuinely cares about doing exceptional work. His technical expertise and problem-solving skills are impressive, but what really sets him apart is his commitment to the team and the client experience. He consistently goes the extra mile to ensure success, and his passion for what he does is evident in everything he delivers. I'm grateful to have him as a colleague!"
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <div class="recommendation-author">Gina Giampaolo</div>
+                    <div class="recommendation-title">VP Customer Success at Zapier</div>
+                    <div class="recommendation-text">
+                        "I had the pleasure of working with Jonathan at Zapier, and I can confidently say he's an exceptional problem solver and collaborator. Jonathan has a unique ability to dig deep into complex challenges, think critically, and come up with creative, effective solutions. What truly sets him apart is his genuine care for the people he works with—he's always willing to lend a hand, share his knowledge, and support his teammates. Jonathan would be a valuable addition to any team lucky enough to work with him!"
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPortfolioContent() {
+            const commentBtn = isAuthenticated ? '<button class="comment-btn" onclick="addComment(this, \'PROJECT_ID\')">+ Comment</button>' : '';
+
+            return `
+                <h2>Technical Portfolio</h2>
+
+                <div class="project" data-project="arc">
+                    ${commentBtn.replace('PROJECT_ID', 'arc')}
+                    <div class="project-name">Arc (Codebase SDK)</div>
+                    <div class="project-desc">
+                        AI-native development workspace with TypeScript CLI + API. Graph-based workflow, knowledge system with FTS5 search, agent session tracking. Migrated Node.js → Bun achieving 24x faster startup.
+                    </div>
+                    <span class="tech-tag">Tech: Bun, TypeScript, SQLite, Drizzle ORM, Commander.js</span>
+                    <p><a href="https://github.com/JDsmeltser" target="_blank">View on GitHub →</a></p>
+                </div>
+
+                <div class="project" data-project="nectre">
+                    ${commentBtn.replace('PROJECT_ID', 'nectre')}
+                    <div class="project-name">Nectre</div>
+                    <div class="project-desc">
+                        Professional networking MVP with real-time features. Next.js 15 + Supabase backend, ordered-pair connection pattern, comprehensive Row Level Security.
+                    </div>
+                    <span class="tech-tag">Tech: Next.js 15, React 19, Supabase, PostgreSQL, TanStack Query</span>
+                    <p><a href="https://github.com/JDsmeltser" target="_blank">View on GitHub →</a></p>
+                </div>
+
+                <div class="project" data-project="makeos">
+                    ${commentBtn.replace('PROJECT_ID', 'makeos')}
+                    <div class="project-name">Make-OS</div>
+                    <div class="project-desc">
+                        Desktop OS built entirely in Make.com with component architecture. AI agent creates applications conversationally through natural language.
+                    </div>
+                    <span class="tech-tag">Tech: Make.com, Python, Alpine.js, AI Agents</span>
+                    <p><a href="https://github.com/smeltserMake" target="_blank">View on GitHub →</a></p>
+                </div>
+
+                <div class="project" data-project="pocketos">
+                    ${commentBtn.replace('PROJECT_ID', 'pocketos')}
+                    <div class="project-name">Pocket OS</div>
+                    <div class="project-desc">
+                        File-based micro-app platform where specs compile through conversation. Multiple specialized apps including custom functions generator and document analyzer.
+                    </div>
+                    <span class="tech-tag">Tech: Next.js, TypeScript, Markdown Specifications</span>
+                    <p><a href="https://github.com/JDsmeltser" target="_blank">View on GitHub →</a></p>
+                </div>
+
+                <div class="project" data-project="endear">
+                    ${commentBtn.replace('PROJECT_ID', 'endear')}
+                    <div class="project-name">Endear Client Demo</div>
+                    <div class="project-desc">
+                        React prototype with AI chat interface, Make.com webhook backend, demonstrating rapid client MVP capabilities. Built for enterprise prospect, showcased conversational AI architecture.
+                    </div>
+                    <span class="tech-tag">Tech: React, Vite, Tailwind, Make.com Webhooks, OpenAI</span>
+                </div>
+
+                <div class="section-label" style="margin-top: 30px;">// Connect</div>
+                <p>
+                    <a href="https://github.com/JDsmeltser" target="_blank">GitHub (Personal)</a> •
+                    <a href="https://github.com/smeltserMake" target="_blank">GitHub (Work)</a> •
+                    <a href="https://linkedin.com/in/jdsmeltser" target="_blank">LinkedIn</a>
+                </p>
+            `;
+        }
+
+        // Commenting
+        function addComment(button, projectId) {
+            if (!isAuthenticated) {
+                alert('Please login via Admin panel to add comments');
+                return;
+            }
+
+            const project = button.closest('.project');
+
+            // Remove any existing comment boxes
+            document.querySelectorAll('.comment-box').forEach(box => box.remove());
+
+            const commentBox = document.createElement('div');
+            commentBox.className = 'comment-box';
+            commentBox.innerHTML = `
+                <textarea placeholder="Add your feedback for this project..."></textarea>
+                <button class="save-comment" onclick="saveComment(this, '${projectId}')">Save Comment</button>
+                <button class="cancel-comment" onclick="this.closest('.comment-box').remove()">Cancel</button>
+            `;
+            project.appendChild(commentBox);
+            commentBox.querySelector('textarea').focus();
+        }
+
+        async function saveComment(button, projectId) {
+            const commentBox = button.closest('.comment-box');
+            const comment = commentBox.querySelector('textarea').value;
+
+            if (!comment.trim()) {
+                alert('Please enter a comment');
+                return;
+            }
+
+            // Fetch existing feedback
+            let feedback = {};
+            try {
+                const response = await fetch('https://api.github.com/repos/jd-smeltser/jd-smeltser.github.io/contents/resume-feedback.json', {
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    feedback = JSON.parse(atob(data.content));
+                    feedback._sha = data.sha;
+                }
+            } catch (e) {
+                console.log('No existing feedback file, creating new one');
+            }
+
+            // Add new comment
+            if (!feedback.comments) feedback.comments = [];
+            feedback.comments.push({
+                section: projectId,
+                comment: comment,
+                timestamp: new Date().toISOString()
             });
 
-            // Remove active from all buttons
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            // Save to GitHub
+            const content = btoa(JSON.stringify(feedback, null, 2));
+            const payload = {
+                message: 'Add portfolio feedback comment',
+                content: content
+            };
 
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
+            if (feedback._sha) {
+                payload.sha = feedback._sha;
+            }
 
-            // Highlight active button
-            event.target.classList.add('active');
+            try {
+                const response = await fetch('https://api.github.com/repos/jd-smeltser/jd-smeltser.github.io/contents/resume-feedback.json', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    alert('Comment saved! Claude will review this feedback.');
+                    commentBox.remove();
+                } else {
+                    const error = await response.json();
+                    alert('Failed to save comment: ' + error.message);
+                }
+            } catch (error) {
+                alert('Error saving comment: ' + error.message);
+            }
         }
     </script>
 </body>
