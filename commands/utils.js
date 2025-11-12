@@ -6,9 +6,9 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
  * Stream text to terminal with character-by-character animation
  * @param {WebSocket} ws - WebSocket connection
  * @param {string} text - Text to stream
- * @param {number} delayMs - Delay between characters (default: 15ms)
+ * @param {number} delayMs - Delay between characters (default: 25ms)
  */
-async function streamText(ws, text, delayMs = 15) {
+async function streamText(ws, text, delayMs = 25) {
   const lines = text.split('\n');
 
   for (let i = 0; i < lines.length; i++) {

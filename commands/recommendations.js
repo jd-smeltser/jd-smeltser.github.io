@@ -28,7 +28,7 @@ module.exports = async (ws, args) => {
     await sleep(50);
 
     sendText(ws, '"');
-    await streamText(ws, rec.quote, 10);
+    await streamText(ws, rec.quote, 20);
     sendText(ws, '"\n');
     await sleep(300);
   }

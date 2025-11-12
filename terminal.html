@@ -94,6 +94,32 @@
             background: #ffffff !important;
         }
 
+        /* Smooth pulsing cursor animation */
+        @keyframes cursor-pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .xterm-cursor-layer .xterm-cursor-block {
+            animation: cursor-pulse 1.5s ease-in-out infinite;
+        }
+
+        .xterm-cursor-layer .xterm-cursor-outline {
+            animation: cursor-pulse 1.5s ease-in-out infinite;
+        }
+
+        .xterm-cursor-layer .xterm-cursor-bar {
+            animation: cursor-pulse 1.5s ease-in-out infinite;
+        }
+
+        .xterm-cursor-layer .xterm-cursor-underline {
+            animation: cursor-pulse 1.5s ease-in-out infinite;
+        }
+
         /* Connection status */
         .status {
             position: fixed;
@@ -199,7 +225,7 @@
 
         // Initialize terminal
         const term = new Terminal({
-            cursorBlink: true,
+            cursorBlink: false,
             fontFamily: 'Menlo, Monaco, "Cascadia Code", Consolas, "Liberation Mono", monospace',
             fontSize: 14,
             theme: currentTheme === 'dark' ? darkTheme : lightTheme,

@@ -42,7 +42,7 @@ module.exports = async (ws, args) => {
     sendText(ws, `\n\x1b[1m\x1b[33m${project.name}\x1b[0m\n`);
     await sleep(50);
 
-    await streamText(ws, project.description, 8);
+    await streamText(ws, project.description, 20);
     sendText(ws, '\n\n\x1b[90mTech Stack:\x1b[0m ' + project.tech + '\n');
     await sleep(100);
 
@@ -51,7 +51,7 @@ module.exports = async (ws, args) => {
 
     for (const highlight of project.highlights) {
       sendText(ws, '  • ');
-      await streamText(ws, highlight, 8);
+      await streamText(ws, highlight, 20);
       sendText(ws, '\n');
       await sleep(50);
     }

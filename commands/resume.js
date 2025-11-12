@@ -46,7 +46,7 @@ I've led innovation in AI-driven development, integrating Claude Code and Make.c
   for (const section of sections) {
     sendText(ws, `\n\x1b[1m${section.title}\x1b[0m\n`);
     await sleep(50);
-    await streamText(ws, section.content, 8);
+    await streamText(ws, section.content, 20);
     sendText(ws, '\n');
     await sleep(200);
   }
