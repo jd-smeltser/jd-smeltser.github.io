@@ -16,6 +16,10 @@
             body { margin: 0; }
             .page-break { page-break-after: always; }
             .download-btn { display: none !important; }
+            .admin-toggle { display: none !important; }
+            .admin-panel { display: none !important; }
+            .edit-indicator { display: none !important; }
+            .comment-box { display: none !important; }
         }
 
         body {
@@ -28,10 +32,9 @@
             font-size: 10pt;
         }
 
-        .download-btn {
+        .download-btn, .admin-toggle {
             position: fixed;
             top: 20px;
-            right: 20px;
             background: #000;
             color: #fff;
             padding: 12px 24px;
@@ -44,8 +47,155 @@
             z-index: 1000;
         }
 
-        .download-btn:hover {
+        .download-btn {
+            right: 20px;
+        }
+
+        .admin-toggle {
+            right: 180px;
+            background: #4a4a4a;
+        }
+
+        .download-btn:hover, .admin-toggle:hover {
             background: #333;
+        }
+
+        .admin-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 8px;
+            padding: 20px;
+            width: 320px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-panel input, .admin-panel textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .admin-panel button {
+            width: 100%;
+            padding: 10px;
+            margin: 4px 0;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .admin-panel .btn-primary {
+            background: #000;
+            color: #fff;
+        }
+
+        .admin-panel .btn-secondary {
+            background: #4a9d7f;
+            color: #fff;
+        }
+
+        .admin-panel .btn-danger {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .admin-panel h4 {
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .mode-btn {
+            padding: 8px;
+            border: 2px solid #000;
+            background: white;
+            color: #000;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .mode-btn.active {
+            background: #000;
+            color: white;
+        }
+
+        .editable-section {
+            position: relative;
+            padding: 8px;
+            margin: -8px;
+            border-radius: 4px;
+        }
+
+        .edit-mode .editable-section:hover {
+            background: #fffbcc;
+            outline: 2px dashed #ffd700;
+        }
+
+        .comment-mode .editable-section:hover {
+            background: #e6f3ff;
+            outline: 2px dashed #4a9d7f;
+        }
+
+        .editable-section[contenteditable="true"] {
+            outline: 2px solid #ffd700;
+            background: #fffbcc;
+        }
+
+        .comment-box {
+            background: #f0f8ff;
+            border: 2px solid #4a9d7f;
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+
+        .comment-box textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            min-height: 60px;
+        }
+
+        .comment-box button {
+            margin-top: 8px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        .comment-box .save-comment {
+            background: #4a9d7f;
+            color: white;
+        }
+
+        .comment-box .cancel-comment {
+            background: #ccc;
+            color: #333;
         }
 
         h1 {
@@ -162,23 +312,67 @@
             font-weight: 700;
             color: #000;
         }
+
+        .status-message {
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
     <button class="download-btn" onclick="downloadPDF()">Download PDF</button>
+    <button class="admin-toggle" onclick="toggleAdmin()">Admin</button>
+
+    <div class="admin-panel" id="adminPanel">
+        <h3 style="margin-bottom: 16px;">Admin Panel</h3>
+
+        <div id="authSection">
+            <input type="password" id="passwordInput" placeholder="Admin Password" />
+            <input type="text" id="githubTokenInput" placeholder="GitHub Token (for edits)" />
+            <button class="btn-primary" onclick="authenticate()">Login</button>
+            <div id="authStatus"></div>
+        </div>
+
+        <div id="adminControls" style="display: none;">
+            <div class="mode-selector">
+                <button class="mode-btn active" onclick="setMode('edit')">Edit Mode</button>
+                <button class="mode-btn" onclick="setMode('comment')">Comment Mode</button>
+            </div>
+
+            <div id="modeInstructions"></div>
+
+            <button class="btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </div>
 
     <div id="resume-content">
-        <h1>JONATHAN SMELTSER</h1>
-        <div class="subtitle">Lead AI Engineer • Value Engineering • Rapid MVP Development</div>
-        <div class="contact">Memphis, TN • j.smeltser@gmail.com • linkedin.com/in/jdsmeltser</div>
+        <div class="editable-section" data-section="header">
+            <h1>JONATHAN SMELTSER</h1>
+            <div class="subtitle">Lead AI Engineer • Value Engineering • Rapid MVP Development</div>
+            <div class="contact">Memphis, TN • j.smeltser@gmail.com • linkedin.com/in/jdsmeltser</div>
+        </div>
 
         <h2>Professional Summary</h2>
-        <div class="summary">
+        <div class="editable-section summary" data-section="summary">
             AI-native engineer who builds production MVPs that close deals. <span class="metric">$425K in enterprise sales</span> driven through rapid prototyping and technical proof-of-concepts. Expert in architecting AI-powered solutions across diverse tech stacks—Make.com automation, Next.js applications, TypeScript CLI tools. Creator of award-winning AI support tool adopted company-wide at Zapier. Passionate about turning client requirements into working prototypes in days, not weeks.
         </div>
 
         <h2>Technical Expertise</h2>
-        <div class="skills">
+        <div class="editable-section skills" data-section="skills">
             <div>
                 <div class="skill-category">AI & Automation</div>
                 <div class="skill-list">Agentic AI Patterns • Model Context Protocol (MCP) • AI Agent Development • Make.com Automation • OpenAI/Claude Integration</div>
@@ -195,98 +389,118 @@
 
         <h2>Professional Experience</h2>
 
-        <h3><span class="company">Make.com</span> — Value Engineer, Enterprise Team</h3>
-        <div class="date">July 2024 - Present (Remote)</div>
-        <p style="margin: 8px 0;">Build enterprise proof-of-value solutions demonstrating Make.com's automation capabilities. Architect client-facing MVPs that accelerate sales cycles and drive adoption.</p>
+        <div class="editable-section" data-section="make-role">
+            <h3><span class="company">Make.com</span> — Value Engineer, Enterprise Team</h3>
+            <div class="date">July 2024 - Present (Remote)</div>
+            <p style="margin: 8px 0;">Build enterprise proof-of-value solutions demonstrating Make.com's automation capabilities. Architect client-facing MVPs that accelerate sales cycles and drive adoption.</p>
+        </div>
 
-        <p style="margin: 8px 0;"><span class="highlight">Revenue Impact:</span></p>
-        <ul>
-            <li><span class="metric">$425,673 in closed revenue</span> across 15 months (July 2024 - October 2025)</li>
-            <li>FY 2025: $169,000 in 6 months | FY 2026: $255,673 YTD</li>
-            <li>Consistently exceed quarterly quotas through technical demonstrations</li>
-        </ul>
+        <div class="editable-section" data-section="make-revenue">
+            <p style="margin: 8px 0;"><span class="highlight">Revenue Impact:</span></p>
+            <ul>
+                <li><span class="metric">$425,673 in closed revenue</span> across 15 months (July 2024 - October 2025)</li>
+                <li>FY 2025: $169,000 in 6 months | FY 2026: $255,673 YTD</li>
+                <li>Consistently exceed quarterly quotas through technical demonstrations</li>
+            </ul>
+        </div>
 
-        <p style="margin: 8px 0;"><span class="highlight">Key Achievements:</span></p>
-        <ul>
-            <li><span class="highlight">Endear AI Assistant</span> — Built full React prototype with AI chat interface for enterprise SaaS client. Demonstrated conversational AI architecture using Make.com webhooks, Google Sheets, and OpenAI integration. Influenced $50K+ deal.</li>
-            <li><span class="highlight">Multi-Stack Integration</span> — Designed 20+ proof-of-concepts spanning Salesforce, NetSuite, Supabase, PostgreSQL, and custom APIs for diverse enterprise clients.</li>
-            <li><span class="highlight">48-Hour Turnaround</span> — Consistently deliver working prototypes within 48-72 hours, translating complex business requirements into technical demonstrations.</li>
-        </ul>
-        <div class="tech">Tech: Make.com Scenarios • Python/JavaScript • React • REST APIs • Webhooks • Multiple Database Systems</div>
+        <div class="editable-section" data-section="make-achievements">
+            <p style="margin: 8px 0;"><span class="highlight">Key Achievements:</span></p>
+            <ul>
+                <li><span class="highlight">Endear AI Assistant</span> — Built full React prototype with AI chat interface for enterprise SaaS client. Demonstrated conversational AI architecture using Make.com webhooks, Google Sheets, and OpenAI integration. Influenced $50K+ deal.</li>
+                <li><span class="highlight">Multi-Stack Integration</span> — Designed 20+ proof-of-concepts spanning Salesforce, NetSuite, Supabase, PostgreSQL, and custom APIs for diverse enterprise clients.</li>
+                <li><span class="highlight">48-Hour Turnaround</span> — Consistently deliver working prototypes within 48-72 hours, translating complex business requirements into technical demonstrations.</li>
+            </ul>
+            <div class="tech">Tech: Make.com Scenarios • Python/JavaScript • React • REST APIs • Webhooks • Multiple Database Systems</div>
+        </div>
 
-        <h3><span class="company">Zapier</span> — Technical Specialist (3 roles, promoted twice)</h3>
-        <div class="date">November 2021 - July 2024 (Remote)</div>
+        <div class="editable-section" data-section="zapier-header">
+            <h3><span class="company">Zapier</span> — Technical Specialist (3 roles, promoted twice)</h3>
+            <div class="date">November 2021 - July 2024 (Remote)</div>
+        </div>
 
-        <p style="margin: 8px 0;"><span class="role">Sales Assist Representative II</span> <span class="date">(Nov 2023 - Mar 2024)</span></p>
-        <ul>
-            <li>Exceeded sales quota by 15% in first month through technical consultations and solution demos</li>
-            <li>Built trust with 500+ prospective customers via live chat</li>
-            <li>Automated sales processes (chat scheduling, revenue reporting) improving team efficiency</li>
-        </ul>
+        <div class="editable-section" data-section="zapier-sales">
+            <p style="margin: 8px 0;"><span class="role">Sales Assist Representative II</span> <span class="date">(Nov 2023 - Mar 2024)</span></p>
+            <ul>
+                <li>Exceeded sales quota by 15% in first month through technical consultations and solution demos</li>
+                <li>Built trust with 500+ prospective customers via live chat</li>
+                <li>Automated sales processes (chat scheduling, revenue reporting) improving team efficiency</li>
+            </ul>
+        </div>
 
-        <p style="margin: 8px 0;"><span class="role">Sr. Retention Specialist</span> <span class="date">(Jul 2023 - Nov 2023)</span></p>
-        <ul>
-            <li>Improved retention rates from &lt;5% to &gt;20% through technical solutions and workflow optimization</li>
-            <li><span class="highlight">OfferFit Automation</span> — Architected time-tracking automation saving 5+ hours per engineer weekly</li>
-        </ul>
+        <div class="editable-section" data-section="zapier-retention">
+            <p style="margin: 8px 0;"><span class="role">Sr. Retention Specialist</span> <span class="date">(Jul 2023 - Nov 2023)</span></p>
+            <ul>
+                <li>Improved retention rates from &lt;5% to &gt;20% through technical solutions and workflow optimization</li>
+                <li><span class="highlight">OfferFit Automation</span> — Architected time-tracking automation saving 5+ hours per engineer weekly</li>
+            </ul>
+        </div>
 
-        <p style="margin: 8px 0;"><span class="role">Technical Support Specialist</span> <span class="date">(Nov 2021 - Jul 2023)</span></p>
-        <ul>
-            <li><span class="highlight">SupportSidekick (AI Tool)</span> — Won Zapier's AI HackWeek with AI-powered Zendesk app. Adopted by entire support organization (100+ users), streamlining ticket resolution.</li>
-            <li>Launched live chat support for high-value customers (50% of all video consultations)</li>
-        </ul>
-        <div class="tech">Tech: Zapier Platform • Python/JavaScript Code Steps • REST APIs • AI Integration (OpenAI)</div>
+        <div class="editable-section" data-section="zapier-support">
+            <p style="margin: 8px 0;"><span class="role">Technical Support Specialist</span> <span class="date">(Nov 2021 - Jul 2023)</span></p>
+            <ul>
+                <li><span class="highlight">SupportSidekick (AI Tool)</span> — Won Zapier's AI HackWeek with AI-powered Zendesk app. Adopted by entire support organization (100+ users), streamlining ticket resolution.</li>
+                <li>Launched live chat support for high-value customers (50% of all video consultations)</li>
+            </ul>
+            <div class="tech">Tech: Zapier Platform • Python/JavaScript Code Steps • REST APIs • AI Integration (OpenAI)</div>
+        </div>
 
         <div class="page-break"></div>
 
         <h2>Technical Portfolio</h2>
-        <p style="margin-bottom: 12px; font-style: italic; color: #555;">Demonstrating continuous learning and rapid prototyping:</p>
+        <div class="editable-section" data-section="portfolio-intro">
+            <p style="margin-bottom: 12px; font-style: italic; color: #555;">Demonstrating continuous learning and rapid prototyping:</p>
+        </div>
 
-        <div class="project">
+        <div class="editable-section project" data-section="portfolio-arc">
             <span class="project-name">Arc (Codebase SDK)</span> — AI-native development workspace with TypeScript CLI + API. Graph-based workflow, knowledge system with FTS5 search, agent session tracking. Migrated Node.js → Bun achieving 24x faster startup.<br>
             <span class="tech">Tech: Bun, TypeScript, SQLite, Drizzle ORM, Commander.js</span>
         </div>
 
-        <div class="project">
+        <div class="editable-section project" data-section="portfolio-nectre">
             <span class="project-name">Nectre</span> — Professional networking MVP with real-time features. Next.js 15 + Supabase backend, ordered-pair connection pattern, comprehensive Row Level Security.<br>
             <span class="tech">Tech: Next.js 15, React 19, Supabase, PostgreSQL, TanStack Query</span>
         </div>
 
-        <div class="project">
+        <div class="editable-section project" data-section="portfolio-makeos">
             <span class="project-name">Make-OS</span> — Desktop OS built entirely in Make.com with component architecture. AI agent creates applications conversationally through natural language.<br>
             <span class="tech">Tech: Make.com, Python, Alpine.js, AI Agents</span>
         </div>
 
-        <div class="project">
+        <div class="editable-section project" data-section="portfolio-pocketos">
             <span class="project-name">Pocket OS</span> — File-based micro-app platform where specs compile through conversation. Multiple specialized apps including custom functions generator and document analyzer.<br>
             <span class="tech">Tech: Next.js, TypeScript, Markdown Specifications</span>
         </div>
 
-        <div class="project">
+        <div class="editable-section project" data-section="portfolio-endear">
             <span class="project-name">Endear Client Demo</span> — React prototype with AI chat interface, Make.com webhook backend, demonstrating rapid client MVP capabilities.<br>
             <span class="tech">Tech: React, Vite, Tailwind, Make.com Webhooks, OpenAI</span>
         </div>
 
-        <p style="margin-top: 8px; font-size: 9pt; color: #666;">GitHub: github.com/JDsmeltser & github.com/smeltserMake</p>
+        <div class="editable-section" data-section="portfolio-github">
+            <p style="margin-top: 8px; font-size: 9pt; color: #666;">GitHub: github.com/JDsmeltser & github.com/smeltserMake</p>
+        </div>
 
         <h2>Earlier Experience</h2>
 
-        <div style="margin-bottom: 10px;">
+        <div class="editable-section" data-section="earlier-carlson" style="margin-bottom: 10px;">
             <span class="company">Carlson Software</span> — Head of Managed Services <span class="date">(Dec 2019 - Nov 2021)</span><br>
             Established first technical support team. Achieved 83% efficiency improvement through automation solutions.
         </div>
 
-        <div style="margin-bottom: 10px;">
+        <div class="editable-section" data-section="earlier-smeltser" style="margin-bottom: 10px;">
             <span class="company">Smeltser Solutions</span> — IT Consultant <span class="date">(Dec 2012 - May 2018)</span><br>
             Technical consulting to 70+ businesses. 80% client retention, 37.5% average productivity increase.
         </div>
 
         <h2>Education</h2>
-        <p><span class="company">Christian Brothers University</span> — Bachelor of Arts, Religion & Philosophy (2007-2016)</p>
+        <div class="editable-section" data-section="education">
+            <p><span class="company">Christian Brothers University</span> — Bachelor of Arts, Religion & Philosophy (2007-2016)</p>
+        </div>
 
         <h2>What Sets Me Apart</h2>
 
-        <div class="two-col">
+        <div class="editable-section two-col" data-section="sets-apart">
             <div>
                 <div class="highlight">Rapid Prototyping</div>
                 <p style="font-size: 9pt; line-height: 1.4;">I architect with AI as a force multiplier. Where traditional developers spend weeks, I ship working MVPs in days.</p>
@@ -305,10 +519,17 @@
             </div>
         </div>
 
-        <p style="text-align: center; margin-top: 20px; font-size: 9pt; color: #666;">References available upon request</p>
+        <div class="editable-section" data-section="footer">
+            <p style="text-align: center; margin-top: 20px; font-size: 9pt; color: #666;">References available upon request</p>
+        </div>
     </div>
 
     <script>
+        let isAuthenticated = false;
+        let githubToken = '';
+        let currentMode = 'edit';
+        const ADMIN_PASSWORD = 'admin123'; // Change this to a secure password
+
         function downloadPDF() {
             const element = document.getElementById('resume-content');
             const opt = {
@@ -319,6 +540,246 @@
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
             html2pdf().set(opt).from(element).save();
+        }
+
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('active');
+        }
+
+        function authenticate() {
+            const password = document.getElementById('passwordInput').value;
+            const token = document.getElementById('githubTokenInput').value;
+
+            if (password === ADMIN_PASSWORD) {
+                isAuthenticated = true;
+                githubToken = token;
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('adminControls').style.display = 'block';
+                showStatus('authStatus', 'Authenticated successfully!', 'success');
+                setMode('edit');
+            } else {
+                showStatus('authStatus', 'Invalid password', 'error');
+            }
+        }
+
+        function logout() {
+            isAuthenticated = false;
+            githubToken = '';
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('adminControls').style.display = 'none';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('githubTokenInput').value = '';
+            document.body.classList.remove('edit-mode', 'comment-mode');
+            removeAllCommentBoxes();
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.body.classList.remove('edit-mode', 'comment-mode');
+            document.body.classList.add(mode + '-mode');
+
+            removeAllCommentBoxes();
+
+            if (mode === 'edit') {
+                document.getElementById('modeInstructions').innerHTML =
+                    '<p style="font-size: 12px; color: #666; margin: 8px 0;">Click any section to edit. Click outside to save. Changes push to GitHub when you save.</p>';
+                setupEditMode();
+            } else {
+                document.getElementById('modeInstructions').innerHTML =
+                    '<p style="font-size: 12px; color: #666; margin: 8px 0;">Click any section to add a comment. Comments are saved for Claude to review later.</p>';
+                setupCommentMode();
+            }
+        }
+
+        function setupEditMode() {
+            const sections = document.querySelectorAll('.editable-section');
+            sections.forEach(section => {
+                section.onclick = function() {
+                    if (currentMode !== 'edit') return;
+
+                    // Disable all other sections
+                    document.querySelectorAll('.editable-section').forEach(s => {
+                        s.contentEditable = false;
+                    });
+
+                    this.contentEditable = true;
+                    this.focus();
+                };
+
+                section.onblur = function() {
+                    this.contentEditable = false;
+                    saveToGitHub(this);
+                };
+            });
+        }
+
+        function setupCommentMode() {
+            const sections = document.querySelectorAll('.editable-section');
+            sections.forEach(section => {
+                section.onclick = function(e) {
+                    if (currentMode !== 'comment') return;
+                    if (e.target.classList.contains('save-comment') || e.target.classList.contains('cancel-comment')) return;
+
+                    // Remove any existing comment boxes
+                    removeAllCommentBoxes();
+
+                    // Add comment box
+                    const commentBox = document.createElement('div');
+                    commentBox.className = 'comment-box';
+                    commentBox.innerHTML = `
+                        <textarea placeholder="Add your feedback for this section..."></textarea>
+                        <button class="save-comment" onclick="saveComment(this)">Save Comment</button>
+                        <button class="cancel-comment" onclick="removeAllCommentBoxes()">Cancel</button>
+                    `;
+                    this.appendChild(commentBox);
+                    commentBox.querySelector('textarea').focus();
+                };
+            });
+        }
+
+        function removeAllCommentBoxes() {
+            document.querySelectorAll('.comment-box').forEach(box => box.remove());
+        }
+
+        async function saveComment(button) {
+            const commentBox = button.closest('.comment-box');
+            const section = commentBox.closest('.editable-section');
+            const sectionId = section.dataset.section;
+            const comment = commentBox.querySelector('textarea').value;
+
+            if (!comment.trim()) {
+                alert('Please enter a comment');
+                return;
+            }
+
+            // Fetch existing feedback
+            let feedback = {};
+            try {
+                const response = await fetch('https://api.github.com/repos/jd-smeltser/jd-smeltser.github.io/contents/resume-feedback.json', {
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    feedback = JSON.parse(atob(data.content));
+                    feedback._sha = data.sha;
+                }
+            } catch (e) {
+                console.log('No existing feedback file, creating new one');
+            }
+
+            // Add new comment
+            if (!feedback.comments) feedback.comments = [];
+            feedback.comments.push({
+                section: sectionId,
+                comment: comment,
+                timestamp: new Date().toISOString()
+            });
+
+            // Save to GitHub
+            const content = btoa(JSON.stringify(feedback, null, 2));
+            const payload = {
+                message: 'Add resume feedback comment',
+                content: content
+            };
+
+            if (feedback._sha) {
+                payload.sha = feedback._sha;
+            }
+
+            try {
+                const response = await fetch('https://api.github.com/repos/jd-smeltser/jd-smeltser.github.io/contents/resume-feedback.json', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    alert('Comment saved! Claude will review this feedback.');
+                    removeAllCommentBoxes();
+                } else {
+                    const error = await response.json();
+                    alert('Failed to save comment: ' + error.message);
+                }
+            } catch (error) {
+                alert('Error saving comment: ' + error.message);
+            }
+        }
+
+        async function saveToGitHub(section) {
+            if (!githubToken) {
+                alert('GitHub token required for saving edits. Please enter it in the admin panel.');
+                return;
+            }
+
+            const sectionId = section.dataset.section;
+            const updatedContent = section.innerHTML;
+
+            try {
+                // Fetch current file
+                const getResponse = await fetch('https://api.github.com/repos/jd-smeltser/jd-smeltser.github.io/contents/index.html', {
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                const fileData = await getResponse.json();
+                const currentContent = atob(fileData.content);
+
+                // Update the HTML (simple replacement for now)
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(currentContent, 'text/html');
+                const targetSection = doc.querySelector(`[data-section="${sectionId}"]`);
+
+                if (targetSection) {
+                    targetSection.innerHTML = updatedContent;
+                    const newContent = doc.documentElement.outerHTML;
+
+                    // Save back to GitHub
+                    const putResponse = await fetch('https://api.github.com/repos/jd-smeltser/jd-smeltser.github.io/contents/index.html', {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${githubToken}`,
+                            'Accept': 'application/vnd.github.v3+json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: `Update ${sectionId} section`,
+                            content: btoa(newContent),
+                            sha: fileData.sha
+                        })
+                    });
+
+                    if (putResponse.ok) {
+                        console.log('Saved to GitHub successfully');
+                    } else {
+                        const error = await putResponse.json();
+                        alert('Failed to save: ' + error.message);
+                    }
+                }
+            } catch (error) {
+                alert('Error saving to GitHub: ' + error.message);
+            }
+        }
+
+        function showStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+            setTimeout(() => {
+                element.innerHTML = '';
+            }, 3000);
         }
     </script>
 </body>
