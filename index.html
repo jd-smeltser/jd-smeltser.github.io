@@ -3,627 +3,322 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlowChat - Automate with Chat</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <title>Jonathan Smeltser - Resume</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root {
-            --primary: #4f46e5;
-            --primary-light: #6366f1;
-            --secondary: #0ea5e9;
-            --accent: #8b5cf6;
-            --light-bg: #f8fafc;
-            --dark-bg: #0f172a;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --text-dark: #f1f5f9;
-            --success: #10b981;
-            --border: #e2e8f0;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        @media print {
+            body { margin: 0; }
+            .page-break { page-break-after: always; }
+            .download-btn { display: none !important; }
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: var(--light-bg);
-            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.5;
+            color: #1a1a1a;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 0.5in;
+            font-size: 10pt;
+        }
+
+        .download-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .download-btn:hover {
+            background: #333;
+        }
+
+        h1 {
+            font-size: 28pt;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 11pt;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .contact {
+            font-size: 9pt;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 12pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 4px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 11pt;
+            font-weight: 600;
+            margin-top: 12px;
+            margin-bottom: 4px;
+        }
+
+        .company {
+            font-weight: 700;
+        }
+
+        .role {
+            font-weight: 600;
+        }
+
+        .date {
+            color: #666;
+            font-style: italic;
+            font-size: 9pt;
+        }
+
+        .summary {
+            margin-bottom: 16px;
             line-height: 1.6;
         }
-        
-        .container {
-            max-width: 100%;
-            padding: 0;
-            overflow-x: hidden;
-        }
-        
-        /* Header */
-        header {
-            background: linear-gradient(to right, var(--primary) 0%, var(--accent) 100%);
-            color: white;
-            padding: 2rem 1.5rem 6rem 1.5rem;
-            text-align: center;
-        }
-        
-        .logo {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .logo i {
-            margin-right: 0.5rem;
-        }
-        
-        .tagline {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            font-weight: 400;
-        }
-        
-        .hero-text {
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .cta-button {
-            background-color: white;
-            color: var(--primary);
-            border: none;
-            padding: 0.875rem 1.75rem;
-            border-radius: 2rem;
-            font-weight: bold;
-            font-size: 1rem;
-            display: inline-block;
-            text-decoration: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        /* Main Section */
-        main {
-            margin-top: -4rem;
-            padding: 0 1.5rem;
-        }
-        
-        .demo-container {
-            background-color: var(--card-bg);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-        
-        .chat-demo {
-            background: var(--light-bg);
-            border-radius: 0.75rem;
-            padding: 1rem;
-        }
-        
-        .chat-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .app-icon {
-            width: 2.5rem;
-            height: 2.5rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.25rem;
-            margin-right: 0.75rem;
-        }
-        
-        .app-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        
-        .message {
-            margin-bottom: 1rem;
-            clear: both;
-            overflow: hidden;
-        }
-        
-        .user, .assistant {
-            padding: 0.75rem 1rem;
-            border-radius: 1rem;
-            max-width: 85%;
-            margin-bottom: 0.5rem;
-            position: relative;
-            font-size: 0.95rem;
-        }
-        
-        .user {
-            background: #e0f2fe;
-            color: var(--text);
-            float: right;
-            border-bottom-right-radius: 0.25rem;
-        }
-        
-        .assistant {
-            background: white;
-            float: left;
-            border-bottom-left-radius: 0.25rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        
-        .action-button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.625rem 1rem;
-            border-radius: 1rem;
-            margin: 0.5rem 0;
-            font-weight: 500;
-            font-size: 0.875rem;
-            display: inline-block;
-            text-align: center;
-        }
-        
-        .email-preview {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin: 0.75rem 0;
-            font-family: monospace;
-            font-size: 0.85rem;
-        }
-        
-        .visualization {
-            margin-top: 2rem;
-        }
-        
-        .visualization-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            text-align: center;
-            color: var(--primary);
-        }
-        
-        .workflow-diagram {
-            background: white;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .workflow-step {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-        
-        .workflow-step:not(:last-child):after {
-            content: '';
-            position: absolute;
-            width: 2px;
-            background: var(--primary-light);
-            top: 2.5rem;
-            bottom: -0.75rem;
-            left: 1.25rem;
-            opacity: 0.3;
-        }
-        
-        .step-number {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            color: white;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-            margin-right: 1rem;
-        }
-        
-        .step-content {
-            flex-grow: 1;
-        }
-        
-        .step-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .step-text {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-        
-        /* Features Section */
-        .features-section {
-            padding: 2rem 0;
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        
-        .features-grid {
+
+        .skills {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 16px;
+            margin-bottom: 16px;
         }
-        
-        .feature-card {
-            background-color: var(--card-bg);
-            border-radius: 1rem;
-            padding: 1.25rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            display: flex;
-            align-items: flex-start;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .feature-icon {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1rem;
-            margin-right: 1rem;
-            flex-shrink: 0;
-        }
-        
-        .feature-content {
-            flex-grow: 1;
-        }
-        
-        .feature-title {
-            font-size: 1rem;
+
+        .skill-category {
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-size: 9.5pt;
         }
-        
-        .feature-text {
-            color: var(--text-light);
-            font-size: 0.9rem;
+
+        .skill-list {
+            color: #333;
+            font-size: 9pt;
+            line-height: 1.4;
         }
-        
-        /* Dark Mode Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            width: 2.5rem;
-            height: 2.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-            font-size: 1.2rem;
-            z-index: 100;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        ul {
+            margin-left: 16px;
+            margin-bottom: 8px;
         }
-        
-        /* Footer */
-        footer {
-            background: var(--primary);
-            color: white;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            margin-top: 3rem;
+
+        li {
+            margin-bottom: 4px;
+            line-height: 1.4;
         }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin: 1.5rem 0;
+
+        .tech {
+            color: #666;
+            font-style: italic;
+            font-size: 9pt;
+            margin-top: 4px;
         }
-        
-        .footer-link {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-size: 0.9rem;
+
+        .project {
+            margin-bottom: 10px;
         }
-        
-        .footer-link:hover {
-            color: white;
+
+        .project-name {
+            font-weight: 700;
         }
-        
-        .copyright {
-            font-size: 0.875rem;
-            opacity: 0.8;
+
+        .highlight {
+            font-weight: 600;
         }
-        
-        /* Dark mode styles */
-        body.dark-mode {
-            background-color: var(--dark-bg);
-            color: var(--text-dark);
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 12px;
         }
-        
-        body.dark-mode .demo-container,
-        body.dark-mode .feature-card,
-        body.dark-mode .workflow-diagram {
-            background-color: #1e293b;
-            border-color: #334155;
-        }
-        
-        body.dark-mode .chat-demo {
-            background: #0f172a;
-        }
-        
-        body.dark-mode .assistant {
-            background: #1e293b;
-            color: var(--text-dark);
-        }
-        
-        body.dark-mode .user {
-            background: #312e81;
-            color: white;
-        }
-        
-        body.dark-mode .chat-header {
-            border-bottom-color: #334155;
-        }
-        
-        body.dark-mode .email-preview {
-            background: #1e293b;
-            border-color: #334155;
-            color: var(--text-dark);
-        }
-        
-        body.dark-mode .feature-title,
-        body.dark-mode .step-title,
-        body.dark-mode .visualization-title,
-        body.dark-mode .section-title {
-            color: #818cf8;
-        }
-        
-        body.dark-mode .feature-text,
-        body.dark-mode .step-text {
-            color: #94a3b8;
-        }
-        
-        body.dark-mode .theme-toggle {
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
+
+        .metric {
+            font-weight: 700;
+            color: #000;
         }
     </style>
 </head>
 <body>
-    <!-- Dark mode toggle -->
-    <div class="theme-toggle" onclick="toggleDarkMode()">
-        <i class="fas fa-moon"></i>
+    <button class="download-btn" onclick="downloadPDF()">Download PDF</button>
+
+    <div id="resume-content">
+        <h1>JONATHAN SMELTSER</h1>
+        <div class="subtitle">Lead AI Engineer • Value Engineering • Rapid MVP Development</div>
+        <div class="contact">Memphis, TN • j.smeltser@gmail.com • linkedin.com/in/jdsmeltser</div>
+
+        <h2>Professional Summary</h2>
+        <div class="summary">
+            AI-native engineer who builds production MVPs that close deals. <span class="metric">$425K in enterprise sales</span> driven through rapid prototyping and technical proof-of-concepts. Expert in architecting AI-powered solutions across diverse tech stacks—Make.com automation, Next.js applications, TypeScript CLI tools. Creator of award-winning AI support tool adopted company-wide at Zapier. Passionate about turning client requirements into working prototypes in days, not weeks.
+        </div>
+
+        <h2>Technical Expertise</h2>
+        <div class="skills">
+            <div>
+                <div class="skill-category">AI & Automation</div>
+                <div class="skill-list">Agentic AI Patterns • Model Context Protocol (MCP) • AI Agent Development • Make.com Automation • OpenAI/Claude Integration</div>
+            </div>
+            <div>
+                <div class="skill-category">Development</div>
+                <div class="skill-list">TypeScript • Python • JavaScript • Node.js • React • Next.js 15 • Bun Runtime</div>
+            </div>
+            <div>
+                <div class="skill-category">Data & APIs</div>
+                <div class="skill-list">PostgreSQL • SQLite • Supabase • Drizzle ORM • REST APIs • GraphQL • Webhooks • Real-time Systems</div>
+            </div>
+        </div>
+
+        <h2>Professional Experience</h2>
+
+        <h3><span class="company">Make.com</span> — Value Engineer, Enterprise Team</h3>
+        <div class="date">July 2024 - Present (Remote)</div>
+        <p style="margin: 8px 0;">Build enterprise proof-of-value solutions demonstrating Make.com's automation capabilities. Architect client-facing MVPs that accelerate sales cycles and drive adoption.</p>
+
+        <p style="margin: 8px 0;"><span class="highlight">Revenue Impact:</span></p>
+        <ul>
+            <li><span class="metric">$425,673 in closed revenue</span> across 15 months (July 2024 - October 2025)</li>
+            <li>FY 2025: $169,000 in 6 months | FY 2026: $255,673 YTD</li>
+            <li>Consistently exceed quarterly quotas through technical demonstrations</li>
+        </ul>
+
+        <p style="margin: 8px 0;"><span class="highlight">Key Achievements:</span></p>
+        <ul>
+            <li><span class="highlight">Endear AI Assistant</span> — Built full React prototype with AI chat interface for enterprise SaaS client. Demonstrated conversational AI architecture using Make.com webhooks, Google Sheets, and OpenAI integration. Influenced $50K+ deal.</li>
+            <li><span class="highlight">Multi-Stack Integration</span> — Designed 20+ proof-of-concepts spanning Salesforce, NetSuite, Supabase, PostgreSQL, and custom APIs for diverse enterprise clients.</li>
+            <li><span class="highlight">48-Hour Turnaround</span> — Consistently deliver working prototypes within 48-72 hours, translating complex business requirements into technical demonstrations.</li>
+        </ul>
+        <div class="tech">Tech: Make.com Scenarios • Python/JavaScript • React • REST APIs • Webhooks • Multiple Database Systems</div>
+
+        <h3><span class="company">Zapier</span> — Technical Specialist (3 roles, promoted twice)</h3>
+        <div class="date">November 2021 - July 2024 (Remote)</div>
+
+        <p style="margin: 8px 0;"><span class="role">Sales Assist Representative II</span> <span class="date">(Nov 2023 - Mar 2024)</span></p>
+        <ul>
+            <li>Exceeded sales quota by 15% in first month through technical consultations and solution demos</li>
+            <li>Built trust with 500+ prospective customers via live chat</li>
+            <li>Automated sales processes (chat scheduling, revenue reporting) improving team efficiency</li>
+        </ul>
+
+        <p style="margin: 8px 0;"><span class="role">Sr. Retention Specialist</span> <span class="date">(Jul 2023 - Nov 2023)</span></p>
+        <ul>
+            <li>Improved retention rates from &lt;5% to &gt;20% through technical solutions and workflow optimization</li>
+            <li><span class="highlight">OfferFit Automation</span> — Architected time-tracking automation saving 5+ hours per engineer weekly</li>
+        </ul>
+
+        <p style="margin: 8px 0;"><span class="role">Technical Support Specialist</span> <span class="date">(Nov 2021 - Jul 2023)</span></p>
+        <ul>
+            <li><span class="highlight">SupportSidekick (AI Tool)</span> — Won Zapier's AI HackWeek with AI-powered Zendesk app. Adopted by entire support organization (100+ users), streamlining ticket resolution.</li>
+            <li>Launched live chat support for high-value customers (50% of all video consultations)</li>
+        </ul>
+        <div class="tech">Tech: Zapier Platform • Python/JavaScript Code Steps • REST APIs • AI Integration (OpenAI)</div>
+
+        <div class="page-break"></div>
+
+        <h2>Technical Portfolio</h2>
+        <p style="margin-bottom: 12px; font-style: italic; color: #555;">Demonstrating continuous learning and rapid prototyping:</p>
+
+        <div class="project">
+            <span class="project-name">Arc (Codebase SDK)</span> — AI-native development workspace with TypeScript CLI + API. Graph-based workflow, knowledge system with FTS5 search, agent session tracking. Migrated Node.js → Bun achieving 24x faster startup.<br>
+            <span class="tech">Tech: Bun, TypeScript, SQLite, Drizzle ORM, Commander.js</span>
+        </div>
+
+        <div class="project">
+            <span class="project-name">Nectre</span> — Professional networking MVP with real-time features. Next.js 15 + Supabase backend, ordered-pair connection pattern, comprehensive Row Level Security.<br>
+            <span class="tech">Tech: Next.js 15, React 19, Supabase, PostgreSQL, TanStack Query</span>
+        </div>
+
+        <div class="project">
+            <span class="project-name">Make-OS</span> — Desktop OS built entirely in Make.com with component architecture. AI agent creates applications conversationally through natural language.<br>
+            <span class="tech">Tech: Make.com, Python, Alpine.js, AI Agents</span>
+        </div>
+
+        <div class="project">
+            <span class="project-name">Pocket OS</span> — File-based micro-app platform where specs compile through conversation. Multiple specialized apps including custom functions generator and document analyzer.<br>
+            <span class="tech">Tech: Next.js, TypeScript, Markdown Specifications</span>
+        </div>
+
+        <div class="project">
+            <span class="project-name">Endear Client Demo</span> — React prototype with AI chat interface, Make.com webhook backend, demonstrating rapid client MVP capabilities.<br>
+            <span class="tech">Tech: React, Vite, Tailwind, Make.com Webhooks, OpenAI</span>
+        </div>
+
+        <p style="margin-top: 8px; font-size: 9pt; color: #666;">GitHub: github.com/JDsmeltser & github.com/smeltserMake</p>
+
+        <h2>Earlier Experience</h2>
+
+        <div style="margin-bottom: 10px;">
+            <span class="company">Carlson Software</span> — Head of Managed Services <span class="date">(Dec 2019 - Nov 2021)</span><br>
+            Established first technical support team. Achieved 83% efficiency improvement through automation solutions.
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <span class="company">Smeltser Solutions</span> — IT Consultant <span class="date">(Dec 2012 - May 2018)</span><br>
+            Technical consulting to 70+ businesses. 80% client retention, 37.5% average productivity increase.
+        </div>
+
+        <h2>Education</h2>
+        <p><span class="company">Christian Brothers University</span> — Bachelor of Arts, Religion & Philosophy (2007-2016)</p>
+
+        <h2>What Sets Me Apart</h2>
+
+        <div class="two-col">
+            <div>
+                <div class="highlight">Rapid Prototyping</div>
+                <p style="font-size: 9pt; line-height: 1.4;">I architect with AI as a force multiplier. Where traditional developers spend weeks, I ship working MVPs in days.</p>
+            </div>
+            <div>
+                <div class="highlight">Tech Stack Agnostic</div>
+                <p style="font-size: 9pt; line-height: 1.4;">Portfolio spans Bun, Node, Python, Next.js, Supabase, PostgreSQL, SQLite, Make.com. I adapt to client infrastructure.</p>
+            </div>
+            <div>
+                <div class="highlight">Revenue-Focused</div>
+                <p style="font-size: 9pt; line-height: 1.4;">$425K in sales demonstrates ability to build demos that close deals, not just technically impressive solutions.</p>
+            </div>
+            <div>
+                <div class="highlight">Daily Builder</div>
+                <p style="font-size: 9pt; line-height: 1.4;">Active on LinkedIn sharing AI explorations. Currently shipping multiple projects while driving enterprise deals.</p>
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 20px; font-size: 9pt; color: #666;">References available upon request</p>
     </div>
-    
-    <div class="container">
-        <!-- Header Section -->
-        <header>
-            <div class="logo">
-                <i class="fas fa-comments"></i> FlowChat
-            </div>
-            <div class="tagline">Automation through conversation</div>
-            <div class="hero-text">
-                Build powerful workflows by simply describing what you want.
-                No coding. No complex interfaces. Just chat.
-            </div>
-            <a href="#demo" class="cta-button">See How It Works</a>
-        </header>
-        
-        <!-- Main Content -->
-        <main>
-            <!-- Chat Demo -->
-            <div class="demo-container" id="demo">
-                <div class="chat-demo">
-                    <div class="chat-header">
-                        <div class="app-icon">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <div class="app-name">FlowChat</div>
-                    </div>
-                    
-                    <div class="message">
-                        <div class="user">I need to email new HubSpot contacts 3 days after they're created.</div>
-                    </div>
-                    
-                    <div class="message">
-                        <div class="assistant">I can help build that automation! This would involve connecting to HubSpot to monitor for new contacts, waiting 3 days, then sending an email. Would you like me to set this up for you?</div>
-                    </div>
-                    
-                    <div class="message">
-                        <div class="user">Yes, please.</div>
-                    </div>
-                    
-                    <div class="message">
-                        <div class="assistant">
-                            Great! I'll need to connect to your HubSpot account and email service. Let's start with HubSpot.
-                            <br><br>
-                            <div class="action-button">Connect HubSpot</div>
-                        </div>
-                    </div>
-                    
-                    <div class="message">
-                        <div class="user">Done. Let's use Gmail for sending emails.</div>
-                    </div>
-                    
-                    <div class="message">
-                        <div class="assistant">
-                            Perfect! Please connect your Gmail account:
-                            <br><br>
-                            <div class="action-button">Connect Gmail</div>
-                        </div>
-                    </div>
-                    
-                    <div class="message">
-                        <div class="user">Connected. Can you draft an email template for me?</div>
-                    </div>
-                    
-                    <div class="message">
-                        <div class="assistant">
-                            Here's a template for your follow-up email:
-                            <div class="email-preview">
-                                <strong>Subject:</strong> Following up on your interest, {{contact.firstName}}
-                                <br><br>
-                                Hello {{contact.firstName}},
-                                <br><br>
-                                Thank you for your interest in our services. I noticed you're from {{contact.company}} and were particularly interested in {{contact.formRequest}}.
-                                <br><br>
-                                I'd love to schedule a quick call to discuss how we can help. Would you have 15 minutes this week?
-                                <br><br>
-                                Best regards,<br>
-                                [Your Name]
-                            </div>
-                            How does this look?
-                        </div>
-                    </div>
-                    
-                    <div class="message">
-                        <div class="user">That looks perfect! Let's activate it.</div>
-                    </div>
-                </div>
-                
-                <!-- Workflow Visualization -->
-                <div class="visualization">
-                    <div class="visualization-title">Your Automation Workflow</div>
-                    <div class="workflow-diagram">
-                        <div class="workflow-step">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <div class="step-title">Trigger</div>
-                                <div class="step-text">New contact created in HubSpot</div>
-                            </div>
-                        </div>
-                        
-                        <div class="workflow-step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <div class="step-title">Wait</div>
-                                <div class="step-text">3 days</div>
-                            </div>
-                        </div>
-                        
-                        <div class="workflow-step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <div class="step-title">Action</div>
-                                <div class="step-text">Send follow-up email via Gmail</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Features Section -->
-            <section class="features-section">
-                <h2 class="section-title">Key Features</h2>
-                
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <div class="feature-content">
-                            <h3 class="feature-title">Conversational Interface</h3>
-                            <p class="feature-text">Create automations by simply describing what you want in plain language.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-plug"></i>
-                        </div>
-                        <div class="feature-content">
-                            <h3 class="feature-title">Easy Connections</h3>
-                            <p class="feature-text">Connect to popular services with guided authentication. No API knowledge needed.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                        <div class="feature-content">
-                            <h3 class="feature-title">Visual Workflows</h3>
-                            <p class="feature-text">See your automation visually to understand exactly what's happening.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-wand-magic-sparkles"></i>
-                        </div>
-                        <div class="feature-content">
-                            <h3 class="feature-title">Smart Mapping</h3>
-                            <p class="feature-text">Intelligently maps data between services, even when formats differ.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-        
-        <!-- Footer -->
-        <footer>
-            <div class="footer-links">
-                <a href="#" class="footer-link">About</a>
-                <a href="#" class="footer-link">Features</a>
-                <a href="#" class="footer-link">Pricing</a>
-                <a href="#" class="footer-link">Contact</a>
-            </div>
-            
-            <p class="copyright">&copy; 2025 FlowChat. All rights reserved.</p>
-        </footer>
-    </div>
-    
+
     <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const icon = document.querySelector('.theme-toggle i');
-            if (document.body.classList.contains('dark-mode')) {
-                icon.className = 'fas fa-sun';
-            } else {
-                icon.className = 'fas fa-moon';
-            }
-        }
-        
-        // Check for user preference
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            toggleDarkMode();
+        function downloadPDF() {
+            const element = document.getElementById('resume-content');
+            const opt = {
+                margin: 0.5,
+                filename: 'Jonathan_Smeltser_Resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
         }
     </script>
 </body>
