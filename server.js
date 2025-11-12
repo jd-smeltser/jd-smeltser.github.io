@@ -26,20 +26,15 @@ const commands = {
   clear: require('./commands/clear')
 };
 
+// Banner generator
+const generateBanner = require('./commands/banner');
+
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
-  // Send welcome message
-  const welcome = `
-┌───────────────────────────────────┐
-│ \x1b[38;5;130m⢀⣀\x1b[0m \x1b[38;5;173m⣀⣀\x1b[0m  \x1b[38;5;166m⢀⡀\x1b[0m \x1b[38;5;136m⡇\x1b[0m \x1b[38;5;101m⣰⡀\x1b[0m \x1b[38;5;130m⢀⣀\x1b[0m \x1b[38;5;173m⢀⡀\x1b[0m \x1b[38;5;166m⡀⣀\x1b[0m   \x1b[38;5;101m⢀⣸\x1b[0m \x1b[38;5;130m⢀⡀\x1b[0m \x1b[38;5;173m⡀⢀\x1b[0m│
-│ \x1b[38;5;130m⠭⠕\x1b[0m \x1b[38;5;173m⠇⠇⠇\x1b[0m \x1b[38;5;166m⠣⠭\x1b[0m \x1b[38;5;136m⠣\x1b[0m \x1b[38;5;101m⠘⠤\x1b[0m \x1b[38;5;130m⠭⠕\x1b[0m \x1b[38;5;173m⠣⠭\x1b[0m \x1b[38;5;166m⠏\x1b[0m  \x1b[38;5;136m⠶\x1b[0m \x1b[38;5;101m⠣⠼\x1b[0m \x1b[38;5;130m⠣⠭\x1b[0m \x1b[38;5;173m⠱⠃\x1b[0m│
-└───────────────────────────────────┘
-
-jonathan smeltser / ai engineer
-
-Type 'help' to get started
-`;
+  // Send welcome message with gradient banner
+  const banner = generateBanner();
+  const welcome = banner + '\nType \'help\' to get started\n';
 
   ws.send(JSON.stringify({ type: 'output', data: welcome }));
   ws.send(JSON.stringify({ type: 'prompt' }));
