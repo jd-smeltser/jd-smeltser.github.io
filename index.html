@@ -50,11 +50,24 @@
         .ascii-header {
             font-size: 12px;
             line-height: 1.2;
-            color: var(--text);
             margin-bottom: 30px;
             white-space: pre;
             overflow-x: auto;
+            font-weight: bold;
         }
+
+        .ascii-s { color: #a0522d; } /* rust brown */
+        .ascii-m { color: #cd853f; } /* burnt sienna */
+        .ascii-e1 { color: #d2691e; } /* chocolate */
+        .ascii-l { color: #b8860b; } /* dark goldenrod */
+        .ascii-t { color: #8b7355; } /* burlywood4 */
+        .ascii-s2 { color: #a0522d; } /* rust brown */
+        .ascii-e2 { color: #cd853f; } /* burnt sienna */
+        .ascii-r { color: #d2691e; } /* chocolate */
+        .ascii-dot { color: #b8860b; } /* dark goldenrod */
+        .ascii-d { color: #8b7355; } /* burlywood4 */
+        .ascii-e3 { color: #a0522d; } /* rust brown */
+        .ascii-v { color: #cd853f; } /* burnt sienna */
 
         /* Theme Toggle */
         .theme-toggle {
@@ -480,7 +493,7 @@
             }
 
             .ascii-header {
-                font-size: 8px;
+                font-size: 6px;
             }
 
             .terminal, .output {
@@ -536,15 +549,12 @@
     </div>
 
     <div class="container">
-        <pre class="ascii-header">
- _____ __  __ _____ _   _____ _____ _________  ______ _______      __
-/ ____|  \/  | ____| | |_   _/ ____|  ____  ||  ____|  __ \ \    / /
-| (___ | \  / | |__  | |   | || (___ | |__  | || |__  | |  | \ \  / /
-\___ \| |\/| |  __| | |   | | \___ \|  __| | ||  __| | |  | |\ \/ /
-____) | |  | | |____| |___| | ____) | |____ | || |____| |__| | \  /
-|_____/|_|  |_|______|_____|_||_____/|______||__|______|_____/   \/
+        <pre class="ascii-header"><span class="ascii-s"> ___</span><span class="ascii-m"> _ __ ___</span><span class="ascii-e1">   ___</span><span class="ascii-l"> | | |_</span><span class="ascii-t"> ___</span><span class="ascii-s2">  ___ </span><span class="ascii-e2"> _ __ </span><span class="ascii-dot">    </span><span class="ascii-d"> __| </span><span class="ascii-e3"> ___ </span><span class="ascii-v">__   __</span>
+<span class="ascii-s">/ __|</span><span class="ascii-m">| '_ ` _ \</span><span class="ascii-e1"> / _ \</span><span class="ascii-l">| | __/</span><span class="ascii-t"> __|</span><span class="ascii-s2"> / _ \</span><span class="ascii-e2">| '__|</span><span class="ascii-dot">   </span><span class="ascii-d">/ _` |</span><span class="ascii-e3">/ _ \</span><span class="ascii-v">\ \ / /</span>
+<span class="ascii-s">\__ \</span><span class="ascii-m">| | | | | |</span><span class="ascii-e1">  __/</span><span class="ascii-l">| | |_ </span><span class="ascii-t">\__ \</span><span class="ascii-s2">|  __/</span><span class="ascii-e2">| |   </span><span class="ascii-dot"> _ </span><span class="ascii-d">| (_| |</span><span class="ascii-e3">  __/</span><span class="ascii-v"> \ V / </span>
+<span class="ascii-s">|___/</span><span class="ascii-m">|_| |_| |_|</span><span class="ascii-e1">\___</span><span class="ascii-l">||_|\__|</span><span class="ascii-t">|___/</span><span class="ascii-s2"> \___</span><span class="ascii-e2">||_|   </span><span class="ascii-dot">(_)</span><span class="ascii-d">\__,_|</span><span class="ascii-e3">\___|</span><span class="ascii-v">  \_/  </span>
 
-Jonathan Smeltser - AI Engineer Portfolio
+jonathan smeltser / ai engineer
         </pre>
 
         <div class="terminal">
