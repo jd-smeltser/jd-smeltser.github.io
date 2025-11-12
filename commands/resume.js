@@ -1,16 +1,13 @@
 // Resume command - interactive guide through experience
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const { sleep, streamText, sendText, sendPrompt } = require('./utils');
 
 module.exports = async (ws, args) => {
   const sections = [
     {
       title: "Professional Summary",
-      content: `As an early adopter in AI-native engineering, I've refined my skill set in rapid
-prototyping. What would typically take weeks or months of effort, I can ship in a
-few days.
+      content: `As an early adopter in AI-native engineering, I've refined my skill set in rapid prototyping. What would typically take weeks or months of effort, I can ship in a few days.
 
-I've led innovation in AI-driven development, integrating Claude Code and Make.com
-automation to accelerate workflows and deliver complex solutions efficiently.`
+I've led innovation in AI-driven development, integrating Claude Code and Make.com automation to accelerate workflows and deliver complex solutions efficiently.`
     },
     {
       title: "Recent Experience",
@@ -42,27 +39,19 @@ automation to accelerate workflows and deliver complex solutions efficiently.`
   ];
 
   // Send resume header
-  ws.send(JSON.stringify({
-    type: 'output',
-    data: '\x1b[1m\x1b[36m━━━ RESUME ━━━\x1b[0m\n'
-  }));
+  sendText(ws, '\x1b[1m\x1b[36m━━━ RESUME ━━━\x1b[0m\n');
+  await sleep(100);
 
-  await sleep(300);
-
-  // Send each section with a pause
+  // Stream each section
   for (const section of sections) {
-    ws.send(JSON.stringify({
-      type: 'output',
-      data: `\n\x1b[1m${section.title}\x1b[0m\n${section.content}\n`
-    }));
-    await sleep(500);
+    sendText(ws, `\n\x1b[1m${section.title}\x1b[0m\n`);
+    await sleep(50);
+    await streamText(ws, section.content, 8);
+    sendText(ws, '\n');
+    await sleep(200);
   }
 
   // Footer
-  ws.send(JSON.stringify({
-    type: 'output',
-    data: '\n\x1b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\x1b[0m\n'
-  }));
-
-  ws.send(JSON.stringify({ type: 'prompt' }));
+  sendText(ws, '\n\x1b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\x1b[0m\n');
+  sendPrompt(ws);
 };

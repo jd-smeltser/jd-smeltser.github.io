@@ -1,5 +1,5 @@
 // Portfolio command - showcase projects
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const { sleep, streamText, sendText, sendPrompt } = require('./utils');
 
 module.exports = async (ws, args) => {
   const projects = [
@@ -35,46 +35,30 @@ module.exports = async (ws, args) => {
     }
   ];
 
-  ws.send(JSON.stringify({
-    type: 'output',
-    data: '\x1b[1m\x1b[36m━━━ PORTFOLIO ━━━\x1b[0m\n'
-  }));
-
-  await sleep(300);
+  sendText(ws, '\x1b[1m\x1b[36m━━━ PORTFOLIO ━━━\x1b[0m\n');
+  await sleep(100);
 
   for (const project of projects) {
-    ws.send(JSON.stringify({
-      type: 'output',
-      data: `\n\x1b[1m\x1b[33m${project.name}\x1b[0m\n`
-    }));
-    await sleep(200);
+    sendText(ws, `\n\x1b[1m\x1b[33m${project.name}\x1b[0m\n`);
+    await sleep(50);
 
-    ws.send(JSON.stringify({
-      type: 'output',
-      data: `${project.description}\n\n\x1b[90mTech Stack:\x1b[0m ${project.tech}\n`
-    }));
-    await sleep(200);
+    await streamText(ws, project.description, 8);
+    sendText(ws, '\n\n\x1b[90mTech Stack:\x1b[0m ' + project.tech + '\n');
+    await sleep(100);
 
-    ws.send(JSON.stringify({
-      type: 'output',
-      data: '\x1b[90mHighlights:\x1b[0m\n'
-    }));
+    sendText(ws, '\x1b[90mHighlights:\x1b[0m\n');
+    await sleep(50);
 
     for (const highlight of project.highlights) {
-      ws.send(JSON.stringify({
-        type: 'output',
-        data: `  • ${highlight}\n`
-      }));
-      await sleep(100);
+      sendText(ws, '  • ');
+      await streamText(ws, highlight, 8);
+      sendText(ws, '\n');
+      await sleep(50);
     }
 
-    await sleep(300);
+    await sleep(200);
   }
 
-  ws.send(JSON.stringify({
-    type: 'output',
-    data: '\n\x1b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\x1b[0m\n'
-  }));
-
-  ws.send(JSON.stringify({ type: 'prompt' }));
+  sendText(ws, '\n\x1b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\x1b[0m\n');
+  sendPrompt(ws);
 };

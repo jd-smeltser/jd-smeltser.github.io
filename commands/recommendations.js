@@ -1,5 +1,5 @@
 // Recommendations command - testimonials
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const { sleep, streamText, sendText, sendPrompt } = require('./utils');
 
 module.exports = async (ws, args) => {
   const recommendations = [
@@ -20,31 +20,19 @@ module.exports = async (ws, args) => {
     }
   ];
 
-  ws.send(JSON.stringify({
-    type: 'output',
-    data: '\x1b[1m\x1b[36m━━━ RECOMMENDATIONS ━━━\x1b[0m\n'
-  }));
-
-  await sleep(300);
+  sendText(ws, '\x1b[1m\x1b[36m━━━ RECOMMENDATIONS ━━━\x1b[0m\n');
+  await sleep(100);
 
   for (const rec of recommendations) {
-    ws.send(JSON.stringify({
-      type: 'output',
-      data: `\n\x1b[1m${rec.name}\x1b[0m\n\x1b[90m${rec.title}\x1b[0m\n\n`
-    }));
-    await sleep(200);
+    sendText(ws, `\n\x1b[1m${rec.name}\x1b[0m\n\x1b[90m${rec.title}\x1b[0m\n\n`);
+    await sleep(50);
 
-    ws.send(JSON.stringify({
-      type: 'output',
-      data: `"${rec.quote}"\n`
-    }));
-    await sleep(500);
+    sendText(ws, '"');
+    await streamText(ws, rec.quote, 10);
+    sendText(ws, '"\n');
+    await sleep(300);
   }
 
-  ws.send(JSON.stringify({
-    type: 'output',
-    data: '\n\x1b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\x1b[0m\n'
-  }));
-
-  ws.send(JSON.stringify({ type: 'prompt' }));
+  sendText(ws, '\n\x1b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\x1b[0m\n');
+  sendPrompt(ws);
 };
